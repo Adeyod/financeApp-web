@@ -88,8 +88,10 @@ const changeUserPassword = async (
 };
 
 const callbackResult = async (reference: string) => {
+  console.log(reference);
   try {
-    const response = await axios(`${callbackRoute}?${reference}`);
+    const response = await axios(`${callbackRoute}?reference=${reference}`);
+    console.log('response: ', response);
     return response;
   } catch (error) {
     console.log(error);

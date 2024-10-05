@@ -23,7 +23,7 @@ const PaystackCallback = () => {
       if (reference === null) {
         return null;
       }
-      const { data } = await callbackResult(reference);
+      const { data } = await callbackResult('r8rljkq18d');
 
       if (data) {
         toast.success(data.message);
