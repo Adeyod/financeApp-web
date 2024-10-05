@@ -111,12 +111,12 @@ const userSlice = createSlice({
       const transactionDetails = action.payload;
       console.log(transactionDetails.totalCount);
 
-      const { totalCount, transactions } = transactionDetails;
+      // const { totalCount, transactions } = transactionDetails;
 
-      const result = {
-        totalCount,
-        transactions,
-      };
+      // const result = {
+      //   totalCount,
+      //   transactions,
+      // };
 
       state.transactionDetails = transactionDetails.transactions;
       state.totalTransactionsCount = transactionDetails.totalCount;

@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import CreditOptions from '../components/CreditOptions';
 import Form from '../components/Form';
-import { Link, useNavigate } from 'react-router-dom';
 import Button from '../components/Button';
-import ImageFile from '../components/ImageFile';
 import {
   RegisterButtonContainerStyle,
   RegisterButtonStyle,
@@ -22,16 +20,9 @@ const CreditAccountPage = () => {
   const [loading, setLoading] = useState(false);
   const [authorizationUrl, setAuthorizationUrl] = useState('');
 
-  console.log(selectedAccountNumber);
-
-  const navigate = useNavigate();
-
   const { accountDetails, currentUser } = useSelector(
     (state: { user: UserState }) => state.user
   );
-
-  console.log(authorizationUrl);
-  console.log(amount);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -47,7 +38,7 @@ const CreditAccountPage = () => {
         setAmount('');
         setSelectedAccountNumber('');
 
-        window.location.href = result.data?.data?.authorization_url;
+        window.location.href = authorizationUrl;
         return;
       }
     } catch (error: any) {

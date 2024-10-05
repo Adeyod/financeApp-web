@@ -13,7 +13,7 @@ const accountsRoute = `${host}/accounts/user-accounts`;
 const transactionsRoute = `${host}/transactions/user-transactions`;
 const creditAccountRoute = `${host}/transactions/initialize`;
 const createAccountRoute = `${host}/accounts/user-account/create`;
-const getTransactionById = `${host}/transactions/`;
+// const getTransactionById = `${host}/transactions/`;
 const callbackRoute = `${host}/transactions/call-back`;
 // const getUserAccounts;
 

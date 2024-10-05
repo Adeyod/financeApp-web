@@ -3,7 +3,11 @@ import { useSelector } from 'react-redux';
 import { TransactionType, UserState } from '../constants/types';
 import Spinner from './Spinner';
 
-const CreditOptions = ({ accountNumber }) => {
+type AccountNumberType = {
+  accountNumber: string;
+};
+
+const CreditOptions = ({ accountNumber }: AccountNumberType) => {
   const [accountTransactionStatistics, setAccountTransactionStatistics] =
     useState<TransactionType[]>([]);
   const [accountBalance, setAccountBalance] = useState('');

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { GoVerified } from 'react-icons/go';
 import { FaRegHandPointRight } from 'react-icons/fa';
 import { BiErrorAlt } from 'react-icons/bi';

@@ -7,6 +7,7 @@ import {
   creditAccountRoute,
   transactionsRoute,
 } from './ApiRoutes';
+import { SuccessMessage, TransactionDataType } from '../constants/types';
 
 const getUserAccounts = async () => {
   try {
@@ -18,12 +19,15 @@ const getUserAccounts = async () => {
   }
 };
 
-const getUserTransactions = async (page, limit): Promise<T> => {
+const getUserTransactions = async (
+  page: string,
+  limit: string
+): Promise<TransactionDataType> => {
   try {
-    const transactions = await axios.get(
+    const transactions = await axios.get<TransactionDataType>(
       `${transactionsRoute}?page=${page}&limit=${limit}`
     );
-    return transactions;
+    return transactions.data;
   } catch (error) {
     console.error(error);
     throw error;
@@ -69,14 +73,14 @@ const changeUserPassword = async (
   current_password: string,
   new_password: string,
   confirm_new_password: string
-): Promise<T> => {
+): Promise<SuccessMessage> => {
   try {
-    const response = await axios.post(ChangePasswordRoute, {
+    const response = await axios.post<SuccessMessage>(ChangePasswordRoute, {
       current_password,
       new_password,
       confirm_new_password,
     });
-    return response;
+    return response.data;
   } catch (error) {
     console.error(error);
     throw error;

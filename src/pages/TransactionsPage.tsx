@@ -16,23 +16,28 @@ const TransactionsPage = () => {
   const [localTransactionDetails, setLocalTransactionDetails] = useState<
     TransactionType[]
   >([]);
-  const { currentUser, transactionDetails, totalTransactionsCount } =
-    useSelector((state: { user: UserState }) => state.user);
+  const { currentUser, totalTransactionsCount } = useSelector(
+    (state: { user: UserState }) => state.user
+  );
 
   const [searchParams] = useSearchParams();
   const page = searchParams.get('page') || '1';
   const limit = searchParams.get('limit') || '10';
 
   const getAllTransactions = async () => {
+    console.log(localTransactionDetails);
     try {
       setLoading(true);
       const response = await getUserTransactions(page, limit);
 
-      if (response) {
-        toast.success(response?.data?.message);
-        dispatch(getTransactionsSuccess(response?.data?.transactions));
+      console.log(response);
 
-        setLocalTransactionDetails(response?.data?.transactions?.transactions);
+      if (response) {
+        toast.success(response?.message);
+        dispatch(getTransactionsSuccess(response?.transactions));
+
+        setLocalTransactionDetails(response?.transactions?.transactions);
+        console.log(response?.transactions?.transactions);
         return;
       }
     } catch (error: any) {

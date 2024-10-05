@@ -3,11 +3,11 @@ import { ButtonProps } from '../constants/types';
 const Button = ({
   title,
   loading,
-  handleSubmit,
+  // handleSubmit,
   buttonStyle,
   buttonContainerStyle,
-  buttonTextStyle,
-}: ButtonProps) => {
+}: // buttonTextStyle,
+ButtonProps) => {
   return (
     <div
       className={

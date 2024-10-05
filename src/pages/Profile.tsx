@@ -8,7 +8,7 @@ import {
   getAccountsSuccess,
   loginSuccess,
 } from '../redux/userSlice';
-import { Account, UserState } from '../constants/types';
+import { UserState } from '../constants/types';
 import { toast } from 'react-toastify';
 import { getUserAccounts } from '../hooks/ApiCalls';
 
@@ -18,7 +18,7 @@ const Profile = () => {
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   console.log(selectedFile);
-  const [buttonText, setButtonText] = useState('Change Image');
+  // const [buttonText, setButtonText] = useState('Change Image');
 
   const fileRef = useRef<HTMLInputElement | null>(null);
   const dispatch = useDispatch();
@@ -57,7 +57,7 @@ const Profile = () => {
         console.log('FileReader loaded:', file, reader.result);
         setImgUrl(reader.result as string); // Preview the selected image
         setSelectedFile(file); // Store the selected file
-        setButtonText('Upload Image');
+        // setButtonText('Upload Image');
       };
       reader.readAsDataURL(file);
     } else {

@@ -62,7 +62,7 @@ const ChangePassword = () => {
       const new_password = formData.new_password;
       const confirm_new_password = formData.confirm_new_password;
 
-      const { data } = await changeUserPassword(
+      const data = await changeUserPassword(
         current_password,
         new_password,
         confirm_new_password

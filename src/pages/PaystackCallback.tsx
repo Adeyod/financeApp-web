@@ -1,19 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Spinner from '../components/Spinner';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { callbackResult } from '../hooks/ApiCalls';
-import { useDispatch } from 'react-redux';
 import { FaRegHandPointRight } from 'react-icons/fa';
 import { GoVerified } from 'react-icons/go';
 import { BiErrorAlt } from 'react-icons/bi';
 
 const PaystackCallback = () => {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
+  // const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [success, setSuccess] = useState(false);
-  const [failure, setFailure] = useState(false);
+  // const [failure, setFailure] = useState(false);
 
   const searchParams = new URLSearchParams(location.search);
   const reference = searchParams.get('reference');
@@ -33,7 +31,7 @@ const PaystackCallback = () => {
       }
     } catch (error: any) {
       console.error(error.message);
-      setFailure(true);
+      // setFailure(true);
       toast.error(error.response.data.message);
     } finally {
       setLoading(false);
@@ -44,19 +42,19 @@ const PaystackCallback = () => {
     handleCallback();
   }, []);
 
-  useEffect(() => {
-    navigateUser();
-  }, [loading, success, failure, navigate]);
+  // useEffect(() => {
+  //   navigateUser();
+  // }, [loading, success, failure, navigate]);
 
-  const navigateUser = () => {
-    const timer = setTimeout(() => {
-      if (!loading && success) {
-        navigate('/accounts');
-      } else if (!loading && failure) {
-        navigate('/credit');
-      }
-    }, 5000);
-  };
+  // const navigateUser = () => {
+  //   const timer = setTimeout(() => {
+  //     if (!loading && success) {
+  //       navigate('/accounts');
+  //     } else if (!loading && failure) {
+  //       navigate('/credit');
+  //     }
+  //   }, 5000);
+  // };
 
   return (
     <div>

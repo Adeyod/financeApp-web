@@ -51,6 +51,17 @@ export type TransactionType = {
   user_id: string;
 };
 
+export type SuccessMessage = {
+  message: string;
+  success: boolean;
+};
+export type TransactionDataType = SuccessMessage & {
+  transactions: {
+    transactions: TransactionType[];
+    totalCount: number;
+  };
+};
+
 export type UserState = {
   currentUser: any;
   accountDetails: {
