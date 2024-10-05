@@ -57,27 +57,3 @@ export const joiLoginValidationSchema = Joi.object({
 
   password: Joi.string().min(8).max(32).required().label('Password'),
 });
-
-// export const joiLoginValidationSchema = Joi.object({
-//   login_input: Joi.string()
-//     .required()
-//     .custom((value, helpers) => {
-//       const emailValidation = Joi.string()
-//         .email({ tlds: { allow: true } })
-//         .validate(value);
-//       if (emailValidation.error) {
-//         const usernameRegexPattern = /^[a-zA-Z0-9_]{3,}$/;
-//         if (!usernameRegexPattern.test(value)) {
-//           return helpers.error('any.invalid', {
-//             custom: 'Invalid email or username',
-//           });
-//         }
-//       }
-//       return value;
-//     })
-//     .messages({
-//       'string.empty': 'Login input is required',
-//       'any.invalid': '{{#custom}}',
-//     }),
-//   password: Joi.string().min(8).max(32).required().label('Password'),
-// });

@@ -47,8 +47,8 @@ const LoginPage = () => {
   const { loading } = useSelector((state: any) => state.user);
 
   let [formData, setFormData] = useState<LoginFormData>({
-    login_input: 'ayodejiadebolu@gmail.com',
-    password: '$Password@6910',
+    login_input: '',
+    password: '',
   });
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -76,6 +76,7 @@ const LoginPage = () => {
         return;
       }
     } catch (error: any) {
+      console.error(error.response.data.message);
       toast.error(error.response.data.message);
       dispatch(loginFailure(error));
     }

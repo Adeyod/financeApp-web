@@ -1,96 +1,81 @@
-import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
-import axios from 'axios';
-
-import Button from '../components/Button';
-import { ResetPasswordRoute } from '../hooks/ApiRoutes';
+import { useState } from 'react';
+import Spinner from '../components/Spinner';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import ImageFile from '../components/ImageFile';
+import { motion } from 'framer-motion';
+import Button from '../components/Button';
 import Form from '../components/Form';
+import {
+  ChangePasswordData,
+  ChangePasswordKey,
+  ChangePasswordParams,
+} from '../constants/types';
 import {
   RegisterButtonContainerStyle,
   RegisterButtonStyle,
   RegisterButtonTextStyle,
 } from '../constants/styles';
-import {
-  ResetPasswordData,
-  ResetPasswordKey,
-  ResetPasswordParams,
-} from '../constants/types';
-import Spinner from '../components/Spinner';
-import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import { joiResetPasswordValidationSchema } from '../hooks/validation';
+import { changeUserPassword } from '../hooks/ApiCalls';
 
-const resetPasswordParams: ResetPasswordParams[] = [
+const changePasswordParams: ChangePasswordParams[] = [
   {
-    title: 'Password',
+    title: 'Current password',
     type: 'password',
     required: true,
-    placeholder: 'Enter password...',
-    field: 'password',
+    field: 'current_password',
+    placeholder: 'Please enter your current password',
   },
   {
-    title: 'Confirm Password',
+    title: 'New password',
     type: 'password',
     required: true,
-    placeholder: 'Confirm password...',
-    field: 'confirm_password',
+    field: 'new_password',
+    placeholder: 'Please enter your new password',
+  },
+  {
+    title: 'Confirm new password',
+    type: 'password',
+    required: true,
+    field: 'confirm_new_password',
+    placeholder: 'Confirm new password',
   },
 ];
 
-const ResetPassword = () => {
+const ChangePassword = () => {
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(true);
-  let [formData, setFormData] = useState<ResetPasswordData>({
-    password: '',
-    confirm_password: '',
+  const [formData, setFormData] = useState<ChangePasswordData>({
+    current_password: '',
+    new_password: '',
+    confirm_new_password: '',
   });
-
-  const searchParams = new URLSearchParams(location.search);
-  const userId = searchParams.get('userId');
-  const token = searchParams.get('token');
-  const expiresAt = searchParams.get('expiresAt');
-
-  const currentTime = Date.now();
-  let expireTime = null;
-
-  if (expiresAt) {
-    expireTime = new Date(expiresAt).getTime();
-  }
-
-  useEffect(() => {
-    if (expireTime && currentTime > expireTime) {
-      navigate('/forgot-password');
-      return;
-    } else {
-      setLoading(false);
-    }
-  }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    const { error } = joiResetPasswordValidationSchema.validate(formData, {
-      abortEarly: false,
-    });
-
-    if (error) {
-      error.details.forEach((detail) => {
-        toast.error(detail.message);
-      });
-      return;
-    }
-
-    setLoading(true);
-
     try {
-      const { data } = await axios.post(
-        `${ResetPasswordRoute}/${userId}/${token}`,
-        formData
+      setLoading(true);
+      console.log(loading);
+      console.log('I am submitting');
+
+      const current_password = formData.current_password;
+      const new_password = formData.new_password;
+      const confirm_new_password = formData.confirm_new_password;
+
+      const { data } = await changeUserPassword(
+        current_password,
+        new_password,
+        confirm_new_password
       );
-      if (data.success) {
+
+      if (data) {
         toast.success(data.message);
-        navigate('/login');
+        setFormData({
+          current_password: '',
+          new_password: '',
+          confirm_new_password: '',
+        });
+        navigate('/profile');
         return;
       }
     } catch (error: any) {
@@ -101,15 +86,14 @@ const ResetPassword = () => {
     }
   };
 
-  const handleChange = (key: ResetPasswordKey, value: string) => {
+  const handleChange = async (key: ChangePasswordKey, value: string) => {
     setFormData((prevState) => ({
       ...prevState,
       [key]: value,
     }));
   };
-
   return (
-    <>
+    <div>
       {loading ? (
         <Spinner />
       ) : (
@@ -131,7 +115,7 @@ const ResetPassword = () => {
                 Reset password
               </p>
 
-              {resetPasswordParams.map((param) => (
+              {changePasswordParams.map((param) => (
                 <div className="">
                   <Form
                     key={param.field}
@@ -147,7 +131,7 @@ const ResetPassword = () => {
             </motion.div>
 
             <Button
-              title={'Reset Password'}
+              title={'Change Password'}
               loading={loading}
               buttonStyle={RegisterButtonStyle}
               buttonContainerStyle={RegisterButtonContainerStyle}
@@ -156,8 +140,8 @@ const ResetPassword = () => {
           </form>
         </div>
       )}
-    </>
+    </div>
   );
 };
 
-export default ResetPassword;
+export default ChangePassword;

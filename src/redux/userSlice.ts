@@ -20,28 +20,13 @@ const initialState = {
     localStorage.getItem('transactionDetails')
   ),
 
+  totalTransactionsCount: safelyParseJSON(
+    localStorage.getItem('totalTransactionsCount')
+  ),
+
   loading: false,
   error: false,
 };
-// const initialState = {
-//   currentUser: localStorage.getItem('currentUser')
-//     ? JSON.parse(localStorage.getItem('currentUser') as string)
-//     : null,
-
-//   access: localStorage.getItem('access')
-//     ? JSON.parse(localStorage.getItem('access') as string)
-//     : null,
-
-//   accountDetails: localStorage.getItem('accountDetails')
-//     ? JSON.parse(localStorage.getItem('accountDetails') as string)
-//     : null,
-//   transactionDetails: localStorage.getItem('transactionDetails')
-//     ? JSON.parse(localStorage.getItem('transactionDetails') as string)
-//     : null,
-
-//   loading: false,
-//   error: false,
-// };
 
 const userSlice = createSlice({
   name: 'user',
@@ -50,6 +35,7 @@ const userSlice = createSlice({
     loginStart(state) {
       state.loading = true;
     },
+
     loginSuccess(state, action) {
       state.loading = false;
       const { user, access } = action.payload;
@@ -58,10 +44,12 @@ const userSlice = createSlice({
       localStorage.setItem('currentUser', JSON.stringify(state.currentUser));
       localStorage.setItem('access', JSON.stringify(state.access));
     },
+
     loginFailure(state, action) {
       state.loading = false;
       state.error = action.payload;
     },
+
     logoutSuccess(state) {
       state.loading = false;
       state.currentUser = null;
@@ -75,12 +63,14 @@ const userSlice = createSlice({
       localStorage.removeItem('transactionDetails');
       state.error = false;
     },
+
     updateUser(state, action) {
       state.loading = false;
       state.currentUser = action.payload;
       localStorage.setItem('currentUser', JSON.stringify(state.currentUser));
       state.error = false;
     },
+
     loadingStop(state) {
       state.loading = false;
     },
@@ -97,25 +87,57 @@ const userSlice = createSlice({
       localStorage.removeItem('transactionDetails');
       state.error = false;
     },
-    getAccountsAndTransactionsStart(state) {
+    getTransactionsStart(state) {
       state.loading = true;
     },
-    getAccountsAndTransactionsSuccess(state, action) {
+    getAccountsStart(state) {
+      state.loading = true;
+    },
+
+    getAccountsSuccess(state, action) {
       state.loading = false;
-      const { accountDetails, transactionDetails } = action.payload;
+      const accountDetails = action.payload;
+
       state.accountDetails = accountDetails;
-      state.transactionDetails = transactionDetails;
 
       localStorage.setItem(
         'accountDetails',
         JSON.stringify(state.accountDetails)
       );
+    },
+
+    getTransactionsSuccess(state, action) {
+      state.loading = false;
+      const transactionDetails = action.payload;
+      console.log(transactionDetails.totalCount);
+
+      const { totalCount, transactions } = transactionDetails;
+
+      const result = {
+        totalCount,
+        transactions,
+      };
+
+      state.transactionDetails = transactionDetails.transactions;
+      state.totalTransactionsCount = transactionDetails.totalCount;
+
       localStorage.setItem(
         'transactionDetails',
         JSON.stringify(state.transactionDetails)
       );
+
+      localStorage.setItem(
+        'totalTransctionsCount',
+        JSON.stringify(state.totalTransactionsCount)
+      );
     },
-    getAccountsAndTransactionsFailure(state, action) {
+
+    getAccountsFailure(state, action) {
+      state.loading = false;
+      state.error = action.payload;
+    },
+
+    getTransactionsFailure(state, action) {
       state.loading = false;
       state.error = action.payload;
     },
@@ -123,9 +145,12 @@ const userSlice = createSlice({
 });
 
 export const {
-  getAccountsAndTransactionsStart,
-  getAccountsAndTransactionsSuccess,
-  getAccountsAndTransactionsFailure,
+  getTransactionsStart,
+  getAccountsStart,
+  getAccountsSuccess,
+  getTransactionsSuccess,
+  getAccountsFailure,
+  getTransactionsFailure,
   updateUser,
   removeUser,
   logoutSuccess,

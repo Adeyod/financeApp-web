@@ -49,8 +49,8 @@ const ForgotPassword = () => {
         navigate('/');
       }
     } catch (error: any) {
-      console.log(error.message);
-      toast.error(error.message);
+      console.error(error.response.data.message);
+      toast.error(error.response.data.message);
     } finally {
       dispatch(loadingStop());
     }

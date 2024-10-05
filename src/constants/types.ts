@@ -13,6 +13,12 @@ export type ResetPasswordData = {
   confirm_password: string;
 };
 
+export type ChangePasswordData = {
+  current_password: string;
+  new_password: string;
+  confirm_new_password: string;
+};
+
 export type LoginFormData = {
   login_input: string;
   password: string;
@@ -28,12 +34,33 @@ export type Account = {
   user_id: string;
 };
 
+export type TransactionType = {
+  account_id: string;
+  account_number: string;
+  amount: string;
+  created_at: string;
+  description: string;
+  id: string;
+  receiving_account: string;
+  reference_number: string;
+  transaction_date: string;
+  transaction_source: string;
+  transaction_status: string;
+  transaction_type: string;
+  updated_at: string;
+  user_id: string;
+};
+
 export type UserState = {
   currentUser: any;
   accountDetails: {
     accounts: Account[];
   };
-  transactionsDetails: any;
+  transactionDetails: TransactionType[];
+  totalTransactionsCount: number;
+
+  loading: boolean;
+  error: boolean;
 };
 
 export type ButtonProps = {
@@ -48,6 +75,7 @@ export type ButtonProps = {
 export type FormDataKey = keyof FormData;
 export type LoginFormDataKey = keyof LoginFormData;
 export type ResetPasswordKey = keyof ResetPasswordData;
+export type ChangePasswordKey = keyof ChangePasswordData;
 
 export type CommonParams = {
   title: string;
@@ -66,6 +94,10 @@ export type RegisterParams = CommonParams & {
 
 export type ResetPasswordParams = CommonParams & {
   field: ResetPasswordKey;
+};
+
+export type ChangePasswordParams = CommonParams & {
+  field: ChangePasswordKey;
 };
 
 export type FormType = CommonParams & {

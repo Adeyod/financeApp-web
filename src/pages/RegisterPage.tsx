@@ -20,7 +20,7 @@ import { Link } from 'react-router-dom';
 const registerParams: RegisterParams[] = [
   {
     title: 'first name',
-    type: 'tex',
+    type: 'text',
     required: true,
     placeholder: 'Enter first name...',
     field: 'first_name',
@@ -97,6 +97,7 @@ const RegisterPage = () => {
         console.log(data);
       }
     } catch (error: any) {
+      console.error(error.response.data.message);
       toast.error(error.response.data.message);
     } finally {
       setLoading(false);
