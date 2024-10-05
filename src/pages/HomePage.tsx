@@ -10,7 +10,7 @@ const HomePage = () => {
       <div className="">
         <h1 className="text-2xl md:text-4xl text-center lg:text-4xl italic">
           Welcome to
-          <span className="text-primary font-bold"> Fund Flow</span>
+          <span className="text-primary font-bold"> Fund Flow!!!</span>
         </h1>
       </div>
 
