@@ -18,7 +18,6 @@ const CreditAccountPage = () => {
     useState<string>('');
   const [amount, setAmount] = useState('');
   const [loading, setLoading] = useState(false);
-  const [authorizationUrl, setAuthorizationUrl] = useState('');
 
   const { accountDetails, currentUser } = useSelector(
     (state: { user: UserState }) => state.user
@@ -34,11 +33,10 @@ const CreditAccountPage = () => {
       if (result && result?.data?.data?.authorization_url) {
         console.log(result);
 
-        setAuthorizationUrl(result.data?.data?.authorization_url);
         setAmount('');
         setSelectedAccountNumber('');
 
-        window.location.href = authorizationUrl;
+        window.location.href = result.data?.data?.authorization_url;
         return;
       }
     } catch (error: any) {

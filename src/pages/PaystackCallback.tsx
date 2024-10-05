@@ -16,6 +16,8 @@ const PaystackCallback = () => {
   const searchParams = new URLSearchParams(location.search);
   const reference = searchParams.get('reference');
 
+  console.log('REFERENCE', reference);
+
   const handleCallback = async () => {
     try {
       if (reference === null) {
