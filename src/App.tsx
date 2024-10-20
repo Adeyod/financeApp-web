@@ -174,16 +174,13 @@ import MyAccountsPage from './pages/MyAccountsPage';
 import TransferPage from './pages/TransferPage';
 import PaystackCallback from './pages/PaystackCallback';
 import AccountDetailsPage from './pages/AccountDetailsPage';
-import { useState } from 'react';
 
 function App() {
-  const [toggle, setToggle] = useState(false);
-
   return (
     <>
       <NavBar />
       <div className="flex h-screen ">
-        <Sidebar toggle={toggle} setToggle={setToggle} />
+        <Sidebar />
 
         <div className="flex-grow overflow-y-auto">
           <Routes>
