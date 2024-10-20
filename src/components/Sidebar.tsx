@@ -1,11 +1,12 @@
-import { useState } from 'react';
 import { IoMdClose, IoMdMenu } from 'react-icons/io';
 import { FcPortraitMode } from 'react-icons/fc';
 import { useSelector } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
 import { UserState } from '../constants/types';
+import { useState } from 'react';
 
-const Sidebar = ({ toggle, setToggle }) => {
+const Sidebar = () => {
+  const [toggle, setToggle] = useState(false);
   const { currentUser } = useSelector(
     (state: { user: UserState }) => state.user
   );

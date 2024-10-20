@@ -7,7 +7,7 @@ import {
 } from '../hooks/functions';
 import { AccountState, TransactionState, UserState } from '../constants/types';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useParams, useSearchParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { getUserSingleAccountTransactions } from '../hooks/ApiCalls';
 import { toast } from 'react-toastify';
 import { getSingleAccountTransactionsSuccess } from '../redux/transactionSlice';

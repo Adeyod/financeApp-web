@@ -222,6 +222,12 @@ export type AccountState = {
   error: boolean;
 };
 
+export type SearchProp = {
+  searchValue: string;
+  setSearchValue: React.Dispatch<React.SetStateAction<string>>;
+  handleKeyPress: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+};
+
 export type TransactionState = {
   transactionDetails: TransactionType[];
   totalTransactionsCount: number;
