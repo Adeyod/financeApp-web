@@ -17,6 +17,7 @@ import {
   RegisterButtonTextStyle,
 } from '../constants/styles';
 import { changeUserPassword } from '../hooks/ApiCalls';
+import axios from 'axios';
 
 const changePasswordParams: ChangePasswordParams[] = [
   {
@@ -78,9 +79,14 @@ const ChangePassword = () => {
         navigate('/profile');
         return;
       }
-    } catch (error: any) {
-      console.error(error.response.data.message);
-      toast.error(error.response.data.message);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error) && error.response) {
+        console.error(error.response.data.message);
+        toast.error(error.response.data.message);
+      } else {
+        console.error('An Error occurred:', error);
+        toast.error('An Error occurred:');
+      }
     } finally {
       setLoading(false);
     }

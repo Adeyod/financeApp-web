@@ -16,13 +16,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { loadingStop, loginStart } from '../redux/userSlice';
 import { useNavigate } from 'react-router-dom';
 import { joiForgotPasswordValidationSchema } from '../hooks/validation';
+import { UserState } from '../constants/types';
 
 const ForgotPassword = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [email, setEmail] = useState('ayodejiadebolu@gmail.com');
 
-  const { loading } = useSelector((state: any) => state.user);
+  const { loading } = useSelector((state: { user: UserState }) => state.user);
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -48,9 +49,14 @@ const ForgotPassword = () => {
         toast.success(data.message);
         navigate('/');
       }
-    } catch (error: any) {
-      console.error(error.response.data.message);
-      toast.error(error.response.data.message);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error) && error.response) {
+        console.error(error.response.data.message);
+        toast.error(error.response.data.message);
+      } else {
+        console.error('An error occurred:', error);
+        toast.error('An error occurred:');
+      }
     } finally {
       dispatch(loadingStop());
     }

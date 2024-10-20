@@ -19,4 +19,13 @@ const formatDate = (date = new Date()) => {
   return dateFormatted;
 };
 
-export { capitalizeFirstLetter, formatDate };
+const formattedNumber = (prop: number) => {
+  const formatter = new Intl.NumberFormat('en-US');
+
+  // const convertedProp = Number(prop);
+
+  const result = formatter.format(prop);
+  return result;
+};
+
+export { capitalizeFirstLetter, formatDate, formattedNumber };

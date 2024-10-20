@@ -1,24 +1,18 @@
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Spinner from '../components/Spinner';
-import axios from 'axios';
-import { ImageUploadRoute } from '../hooks/ApiRoutes';
-import {
-  getAccountsFailure,
-  getAccountsSuccess,
-  loginSuccess,
-} from '../redux/userSlice';
-import { UserState } from '../constants/types';
+import { loginSuccess } from '../redux/userSlice';
+import { AccountState, UserState } from '../constants/types';
 import { toast } from 'react-toastify';
-import { getUserAccounts } from '../hooks/ApiCalls';
+import { getUserAccounts, imageProfileUpload } from '../hooks/ApiCalls';
+import { getAccountsFailure, getAccountsSuccess } from '../redux/accountSlice';
+import axios from 'axios';
 
 const Profile = () => {
   const [loading, setLoading] = useState(true);
   const [imgUrl, setImgUrl] = useState<string>();
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  console.log(selectedFile);
-  // const [buttonText, setButtonText] = useState('Change Image');
 
   const fileRef = useRef<HTMLInputElement | null>(null);
   const dispatch = useDispatch();
@@ -35,7 +29,7 @@ const Profile = () => {
       }
       console.log(formData);
 
-      const { data } = await axios.post(ImageUploadRoute, formData);
+      const { data } = await imageProfileUpload(formData);
 
       if (data) {
         toast.success(data.message);
@@ -71,9 +65,15 @@ const Profile = () => {
     }
   };
 
-  const { currentUser, accountDetails } = useSelector(
+  const { currentUser } = useSelector(
     (state: { user: UserState }) => state.user
   );
+
+  const { accountDetails } = useSelector(
+    (state: { accounts: AccountState }) => state.accounts
+  );
+
+  console.log('IMAGE:', currentUser?.profile_image?.url);
 
   const primary_account = accountDetails?.accounts?.find(
     (account) => account.is_default === true
@@ -86,10 +86,15 @@ const Profile = () => {
       const accountDetails = accountData?.data;
 
       dispatch(getAccountsSuccess(accountDetails));
-    } catch (error: any) {
-      console.error(error.response.data.message);
-      toast.error(error.response.data.message);
-      dispatch(getAccountsFailure(error));
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error) && error.response) {
+        console.error(error.response.data.message);
+        toast.error(error.response.data.message);
+        dispatch(getAccountsFailure(error));
+      } else {
+        console.error('An error occurred:', error);
+        toast.error('An error occurred:');
+      }
     } finally {
       setLoading(false);
     }
@@ -104,7 +109,7 @@ const Profile = () => {
       {loading ? (
         <Spinner />
       ) : (
-        <div className="flex flex-col items-center h-[3000px]">
+        <div className="flex flex-col items-center">
           <p className="mt-10 uppercase italic underline font-bold text-xl md:text-2xl lg:text-3xl">
             My Profile
           </p>

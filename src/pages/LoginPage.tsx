@@ -8,6 +8,7 @@ import {
   LoginFormData,
   LoginFormDataKey,
   LoginParams,
+  UserState,
 } from '../constants/types';
 import Form from '../components/Form';
 import Button from '../components/Button';
@@ -44,11 +45,11 @@ const LoginPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { loading } = useSelector((state: any) => state.user);
+  const { loading } = useSelector((state: { user: UserState }) => state.user);
 
-  let [formData, setFormData] = useState<LoginFormData>({
-    login_input: '',
-    password: '',
+  const [formData, setFormData] = useState<LoginFormData>({
+    login_input: 'adeyod',
+    password: '$Adebolu@6910',
   });
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -67,7 +68,13 @@ const LoginPage = () => {
 
     dispatch(loginStart());
     try {
-      const { data } = await axios.post(LoginRoute, formData);
+      const { data } = await axios.post(LoginRoute, formData, {
+        headers: {
+          'x-fund-flow': 'web-fund-flow',
+        },
+      });
+
+      console.log(data);
 
       if (data) {
         toast.success(data.message);
@@ -75,10 +82,15 @@ const LoginPage = () => {
         navigate('/profile');
         return;
       }
-    } catch (error: any) {
-      console.error(error.response.data.message);
-      toast.error(error.response.data.message);
-      dispatch(loginFailure(error));
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error) && error.response) {
+        console.error(error.response.data.message);
+        toast.error(error.response.data.message);
+        dispatch(loginFailure(error));
+      } else {
+        console.error('An Error occurred:', error);
+        toast.error('An error occurred');
+      }
     }
   };
 

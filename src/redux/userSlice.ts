@@ -15,17 +15,8 @@ const initialState = {
 
   access: safelyParseJSON(localStorage.getItem('access')),
 
-  accountDetails: safelyParseJSON(localStorage.getItem('accountDetails')),
-  transactionDetails: safelyParseJSON(
-    localStorage.getItem('transactionDetails')
-  ),
-
-  totalTransactionsCount: safelyParseJSON(
-    localStorage.getItem('totalTransactionsCount')
-  ),
-
   loading: false,
-  error: false,
+  error: null,
 };
 
 const userSlice = createSlice({
@@ -54,21 +45,19 @@ const userSlice = createSlice({
       state.loading = false;
       state.currentUser = null;
       state.access = null;
-      state.transactionDetails = null;
-      state.accountDetails = null;
 
       localStorage.removeItem('currentUser');
       localStorage.removeItem('access');
       localStorage.removeItem('accountDetails');
       localStorage.removeItem('transactionDetails');
-      state.error = false;
+      state.error = null;
     },
 
     updateUser(state, action) {
       state.loading = false;
       state.currentUser = action.payload;
       localStorage.setItem('currentUser', JSON.stringify(state.currentUser));
-      state.error = false;
+      state.error = null;
     },
 
     loadingStop(state) {
@@ -78,79 +67,17 @@ const userSlice = createSlice({
     removeUser(state) {
       state.loading = false;
       state.currentUser = null;
-      state.transactionDetails = null;
-      state.accountDetails = null;
 
       localStorage.removeItem('currentUser');
       localStorage.removeItem('access');
       localStorage.removeItem('accountDetails');
       localStorage.removeItem('transactionDetails');
-      state.error = false;
-    },
-    getTransactionsStart(state) {
-      state.loading = true;
-    },
-    getAccountsStart(state) {
-      state.loading = true;
-    },
-
-    getAccountsSuccess(state, action) {
-      state.loading = false;
-      const accountDetails = action.payload;
-
-      state.accountDetails = accountDetails;
-
-      localStorage.setItem(
-        'accountDetails',
-        JSON.stringify(state.accountDetails)
-      );
-    },
-
-    getTransactionsSuccess(state, action) {
-      state.loading = false;
-      const transactionDetails = action.payload;
-      console.log(transactionDetails.totalCount);
-
-      // const { totalCount, transactions } = transactionDetails;
-
-      // const result = {
-      //   totalCount,
-      //   transactions,
-      // };
-
-      state.transactionDetails = transactionDetails.transactions;
-      state.totalTransactionsCount = transactionDetails.totalCount;
-
-      localStorage.setItem(
-        'transactionDetails',
-        JSON.stringify(state.transactionDetails)
-      );
-
-      localStorage.setItem(
-        'totalTransctionsCount',
-        JSON.stringify(state.totalTransactionsCount)
-      );
-    },
-
-    getAccountsFailure(state, action) {
-      state.loading = false;
-      state.error = action.payload;
-    },
-
-    getTransactionsFailure(state, action) {
-      state.loading = false;
-      state.error = action.payload;
+      state.error = null;
     },
   },
 });
 
 export const {
-  getTransactionsStart,
-  getAccountsStart,
-  getAccountsSuccess,
-  getTransactionsSuccess,
-  getAccountsFailure,
-  getTransactionsFailure,
   updateUser,
   removeUser,
   logoutSuccess,

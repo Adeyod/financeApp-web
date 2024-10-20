@@ -7,6 +7,9 @@ import axios from 'axios';
 import { logoutRoute } from '../hooks/ApiRoutes';
 import { loginFailure, loginStart, logoutSuccess } from '../redux/userSlice';
 import { toast } from 'react-toastify';
+import { clearAccounts } from '../redux/accountSlice';
+import { clearTransactions } from '../redux/transactionSlice';
+import { UserState } from '../constants/types';
 
 const NavBar = () => {
   const [toggle, setToggle] = useState(false);
@@ -15,7 +18,9 @@ const NavBar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { currentUser, access } = useSelector((state: any) => state.user);
+  const { currentUser, access } = useSelector(
+    (state: { user: UserState }) => state.user
+  );
 
   const handleFixed = () => {
     if (window.scrollY > 10) {
@@ -31,12 +36,20 @@ const NavBar = () => {
       const { data } = await axios.get(logoutRoute);
       if (data) {
         dispatch(logoutSuccess());
+        dispatch(clearAccounts());
+        dispatch(clearTransactions());
         toast.success(data.message);
         navigate('/login');
       }
-    } catch (error: any) {
-      console.error(error.message);
-      dispatch(loginFailure(error));
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error) && error.response) {
+        console.error(error.response.data.message);
+        toast.error(error.response.data.message);
+        dispatch(loginFailure(error));
+      } else {
+        console.error('An error occurred:', error);
+        toast.error('An error occurred:');
+      }
     }
   };
 
@@ -111,13 +124,33 @@ const NavBar = () => {
                 toggle
                   ? 'fade-enter fade-enter-active'
                   : 'hidden fade-exit fade-exit-active',
-                'bg-primary absolute md:hidden h-full top-[70px] w-[30vw] pl-10  pb-10 items-start right-0 text-xl',
+                'bg-primary z-[9999] absolute md:hidden h-screen top-[70px] w-[30vw] pl-10  pb-10 items-start right-0 text-xl',
               ].join(' ')}
             >
               {currentUser && currentUser !== null ? (
                 <div className="flex flex-col items-center gap-4 mt-6">
                   <Link to="/profile" className="">
                     Profile
+                  </Link>
+
+                  <Link to="/change-password" className="">
+                    Change Password
+                  </Link>
+
+                  <Link to="/transactions" className="">
+                    Transactions
+                  </Link>
+
+                  <Link to="/accounts" className="">
+                    My Accounts
+                  </Link>
+
+                  <Link to="/credit" className="">
+                    Credit Account
+                  </Link>
+
+                  <Link to="/transfer" className="">
+                    Transfer funds
                   </Link>
 
                   <button onClick={handleLogout}>Logout</button>

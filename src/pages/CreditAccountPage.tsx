@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import CreditOptions from '../components/CreditOptions';
 import Form from '../components/Form';
 import Button from '../components/Button';
@@ -7,21 +7,107 @@ import {
   RegisterButtonStyle,
   RegisterButtonTextStyle,
 } from '../constants/styles';
-import { useSelector } from 'react-redux';
-import { UserState } from '../constants/types';
+import { useDispatch, useSelector } from 'react-redux';
+import { AccountState, TransactionState, UserState } from '../constants/types';
 import { capitalizeFirstLetter } from '../hooks/functions';
-import { creditUserAccount } from '../hooks/ApiCalls';
+import {
+  creditUserAccount,
+  getUserSingleAccountDetailsByAccountNumber,
+  getUserSingleAccountTransactionsWithoutQuery,
+} from '../hooks/ApiCalls';
 import { toast } from 'react-toastify';
+import { getSingleAccountTransactionsSuccess } from '../redux/transactionSlice';
+import { getSingleAccountSuccess } from '../redux/accountSlice';
+import axios from 'axios';
 
 const CreditAccountPage = () => {
+  const dispatch = useDispatch();
   const [selectedAccountNumber, setSelectedAccountNumber] =
     useState<string>('');
   const [amount, setAmount] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const { accountDetails, currentUser } = useSelector(
+  const { accountDetails, singleAccountDetails } = useSelector(
+    (state: { accounts: AccountState }) => state.accounts
+  );
+  console.log(singleAccountDetails);
+
+  const { currentUser } = useSelector(
     (state: { user: UserState }) => state.user
   );
+
+  const {
+    // singleAccountTransactionDetails,
+    singleAccountCompletedTransactionsCount,
+    singleAccountTotalTransactionsCount,
+  } = useSelector(
+    (state: { transactions: TransactionState }) => state.transactions
+  );
+
+  const getAllTransactions = async () => {
+    try {
+      setLoading(true);
+
+      if (!selectedAccountNumber) {
+        console.log('account number is not selected');
+        return;
+      }
+      const response = await getUserSingleAccountTransactionsWithoutQuery(
+        selectedAccountNumber
+      );
+
+      if (response) {
+        toast.success(response?.message);
+        dispatch(getSingleAccountTransactionsSuccess(response));
+        console.log('CREDIT PAGE:', response.transactions);
+
+        return;
+      }
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error) && error.response) {
+        console.error(error.response.data.message);
+        toast.error(error.response.data.message);
+      } else {
+        console.error('An error occurred:', error);
+        toast.error('An error occurred:');
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getAccountDetails = async () => {
+    try {
+      if (!selectedAccountNumber) {
+        console.log('account number is not selected');
+        return;
+      }
+
+      const response = await getUserSingleAccountDetailsByAccountNumber(
+        selectedAccountNumber
+      );
+
+      if (response) {
+        toast.success(response?.message);
+        console.log(response);
+        dispatch(getSingleAccountSuccess(response));
+        return;
+      }
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error) && error.response) {
+        console.error(error.response.data.message);
+        toast.error(error.response.data.message);
+      } else {
+        console.error('An error occurred:', error);
+        toast.error('An error occurred:');
+      }
+    }
+  };
+
+  useEffect(() => {
+    getAllTransactions();
+    getAccountDetails();
+  }, [selectedAccountNumber]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -39,9 +125,14 @@ const CreditAccountPage = () => {
         window.location.href = result.data?.data?.authorization_url;
         return;
       }
-    } catch (error: any) {
-      console.error(error.response.data.message);
-      toast.error(error.response.data.message);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error) && error.response) {
+        console.error(error.response.data.message);
+        toast.error(error.response.data.message);
+      } else {
+        console.error('An error occurred:', error);
+        toast.error('An error occurred:');
+      }
     } finally {
       setLoading(false);
     }
@@ -61,7 +152,16 @@ const CreditAccountPage = () => {
           seamless transactions
         </p>
       </div>
-      <CreditOptions accountNumber={selectedAccountNumber} />
+      <CreditOptions
+        singleAccountCompletedTransactionsCount={
+          singleAccountCompletedTransactionsCount
+        }
+        singleAccountTotalTransactionsCount={
+          singleAccountTotalTransactionsCount
+        }
+        accountInfo={singleAccountDetails}
+        selectedAccountNumber={selectedAccountNumber}
+      />
       <div className="flex mt-[70px] lg:justify-around md:gap-[100px] justify-center items-center md:px-10 lg:px-20 py-10">
         <form
           action=""

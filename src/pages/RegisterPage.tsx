@@ -96,9 +96,14 @@ const RegisterPage = () => {
         toast.success(data.message);
         console.log(data);
       }
-    } catch (error: any) {
-      console.error(error.response.data.message);
-      toast.error(error.response.data.message);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error) && error.response) {
+        console.error(error.response.data.message);
+        toast.error(error.response.data.message);
+      } else {
+        console.error('An error occurred:', error);
+        toast.error('An error occurred:');
+      }
     } finally {
       setLoading(false);
     }

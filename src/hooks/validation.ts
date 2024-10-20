@@ -17,6 +17,18 @@ export const joiRegisterValidationSchema = Joi.object({
   phone_number: Joi.string().min(11).required().label('Phone Number'),
 });
 
+export const joiOtherBanksValidationSchema = Joi.object({
+  amount: Joi.number().min(2).required(),
+  narration: Joi.string().allow('').optional(),
+});
+
+export const joiReceivingAccountSchema = Joi.object({
+  receiving_account: Joi.string()
+    .pattern(/^[0-9]+$/)
+    .min(10)
+    .required(),
+});
+
 export const joiResetPasswordValidationSchema = Joi.object({
   password: Joi.string().required().min(8).max(32).label('Password'),
   confirm_password: Joi.string()

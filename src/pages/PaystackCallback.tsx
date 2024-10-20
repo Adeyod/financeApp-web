@@ -6,6 +6,7 @@ import { callbackResult } from '../hooks/ApiCalls';
 import { FaRegHandPointRight } from 'react-icons/fa';
 import { GoVerified } from 'react-icons/go';
 import { BiErrorAlt } from 'react-icons/bi';
+import axios from 'axios';
 
 const PaystackCallback = () => {
   // const navigate = useNavigate();
@@ -31,10 +32,14 @@ const PaystackCallback = () => {
         setSuccess(true);
         return;
       }
-    } catch (error: any) {
-      console.error(error.message);
-      // setFailure(true);
-      toast.error(error.response.data.message);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error) && error.response) {
+        console.error(error.response.data.message);
+        toast.error(error.response.data.message);
+      } else {
+        console.error('An error occurred:', error);
+        toast.error('An error occurred:');
+      }
     } finally {
       setLoading(false);
     }

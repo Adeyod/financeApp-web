@@ -41,7 +41,7 @@ const resetPasswordParams: ResetPasswordParams[] = [
 const ResetPassword = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  let [formData, setFormData] = useState<ResetPasswordData>({
+  const [formData, setFormData] = useState<ResetPasswordData>({
     password: '',
     confirm_password: '',
   });
@@ -93,9 +93,14 @@ const ResetPassword = () => {
         navigate('/login');
         return;
       }
-    } catch (error: any) {
-      console.error(error.response.data.message);
-      toast.error(error.response.data.message);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error) && error.response) {
+        console.error(error.response.data.message);
+        toast.error(error.response.data.message);
+      } else {
+        console.error('An error occurred:', error);
+        toast.error('An error occurred:');
+      }
     } finally {
       setLoading(false);
     }
