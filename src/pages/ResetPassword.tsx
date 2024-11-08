@@ -20,6 +20,7 @@ import Spinner from '../components/Spinner';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { joiResetPasswordValidationSchema } from '../hooks/validation';
+import { resetPasswordProcess } from '../hooks/ApiCalls';
 
 const resetPasswordParams: ResetPasswordParams[] = [
   {
@@ -47,8 +48,8 @@ const ResetPassword = () => {
   });
 
   const searchParams = new URLSearchParams(location.search);
-  const userId = searchParams.get('userId');
-  const token = searchParams.get('token');
+  const userId = searchParams.get('userId') || '';
+  const token = searchParams.get('token') || '';
   const expiresAt = searchParams.get('expiresAt');
 
   const currentTime = Date.now();
@@ -57,6 +58,8 @@ const ResetPassword = () => {
   if (expiresAt) {
     expireTime = new Date(expiresAt).getTime();
   }
+
+  const dataObj = { ...formData, userId, token };
 
   useEffect(() => {
     if (expireTime && currentTime > expireTime) {
@@ -84,10 +87,9 @@ const ResetPassword = () => {
     setLoading(true);
 
     try {
-      const { data } = await axios.post(
-        `${ResetPasswordRoute}/${userId}/${token}`,
-        formData
-      );
+      const { data } = await resetPasswordProcess(dataObj);
+
+      axios.post(`${ResetPasswordRoute}/${userId}/${token}`, formData);
       if (data.success) {
         toast.success(data.message);
         navigate('/login');

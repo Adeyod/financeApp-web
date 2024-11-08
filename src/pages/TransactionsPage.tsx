@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 import {
+  SidebarProp,
   TransactionState,
   TransactionType,
   UserState,
@@ -20,7 +21,8 @@ import axios from 'axios';
 import Search from '../components/Search';
 import useDebounce from '../hooks/UseDebounce';
 
-const TransactionsPage = () => {
+const TransactionsPage = ({ transactionClick }: SidebarProp) => {
+  console.log(transactionClick);
   const dispatch = useDispatch();
   const location = useLocation();
   const [loading, setLoading] = useState(false);
@@ -81,6 +83,7 @@ const TransactionsPage = () => {
     const queryParams = new URLSearchParams();
     queryParams.set('page', page.toString());
     queryParams.set('limit', limit.toString());
+    console.log('I am running');
 
     if (searchValue) {
       queryParams.set('search', searchValue);
@@ -95,7 +98,7 @@ const TransactionsPage = () => {
     );
 
     getAllTransactions(searchValue);
-  }, [page, location.pathname]);
+  }, [page, location.pathname, limit, searchValue, transactionClick]);
 
   return (
     <div>

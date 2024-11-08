@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Form from '../Form';
 import Button from '../Button';
 import {
@@ -7,17 +7,28 @@ import {
   RegisterButtonTextStyle,
 } from '../../constants/styles';
 import { toast } from 'react-toastify';
-import { makeTransferToFundFlowAccount } from '../../hooks/ApiCalls';
+import {
+  getFundFlowReceivingAccountName,
+  makeTransferToFundFlowAccount,
+} from '../../hooks/ApiCalls';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { FundFlowProp } from '../../constants/types';
+import { FundFlowProp, ReceiverProp } from '../../constants/types';
+import { joiReceivingAccountSchema } from '../../hooks/validation';
+import SmallSpinner from '../SmallSpinner';
 
 const FundFlow = ({ selectedAccountNumber }: FundFlowProp) => {
   const navigate = useNavigate();
   const [amount, setAmount] = useState('');
   const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [receivingAccount, setReceivingAccount] = useState('');
   const [description, setDescription] = useState('');
+  const [logError, setLogError] = useState('');
+  const [receiverDetails, setReceiverDetails] = useState<ReceiverProp>({
+    first_name: '',
+    last_name: '',
+  });
 
   const handleChange = (text: string) => {
     setAmount(text);
@@ -81,6 +92,62 @@ const FundFlow = ({ selectedAccountNumber }: FundFlowProp) => {
     }
   };
 
+  const data = { receiving_account: receivingAccount };
+
+  const getReceiverAccountName = async () => {
+    try {
+      setIsLoading(true);
+      const { error } = joiReceivingAccountSchema.validate(data, {
+        abortEarly: false,
+      });
+
+      if (error) {
+        console.log(error);
+        error.details.forEach((detail) => {
+          console.log(detail.message);
+          toast.error(detail.message);
+        });
+        return;
+      }
+
+      if (!selectedAccountNumber) {
+        console.error('Please select the receiving bank');
+      }
+
+      if (!receivingAccount) {
+        console.error('Please select the receiving account');
+        toast.error('Please select the receiving account');
+      }
+
+      const response = await getFundFlowReceivingAccountName(receivingAccount);
+
+      console.log(response);
+      if (response) {
+        setReceiverDetails({
+          first_name: response?.receiverDetails?.first_name,
+          last_name: response?.receiverDetails?.last_name,
+        });
+      }
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error) && error.response) {
+        console.error(error.response.data.message);
+        setLogError(error.response.data.message.slice(0, 20));
+        toast.error(error.response.data.message);
+      } else {
+        console.error('An error occurred:', error);
+        toast.error('An error occurred:');
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (receivingAccount.length === 10) {
+      getReceiverAccountName();
+    }
+  }, [receivingAccount]);
+
   console.log('RECEIVING ACCOUNT:', receivingAccount);
   console.log('AMOUNT:', amount);
   console.log('SELECTED ACCOUNT:', selectedAccountNumber);
@@ -105,6 +172,21 @@ const FundFlow = ({ selectedAccountNumber }: FundFlowProp) => {
             value={receivingAccount}
             setValue={handleAccountChange}
           />
+
+          <div className=" flex mb-[-5px] mt-[3px] gap-10">
+            <p className="text-[15px] uppercase font-bold">
+              {isLoading ? (
+                <SmallSpinner />
+              ) : receiverDetails?.first_name ? (
+                `${receiverDetails?.first_name} ${receiverDetails?.last_name}`
+              ) : logError ? (
+                logError
+              ) : (
+                ''
+              )}
+            </p>
+          </div>
+
           <Form
             title={'narration'}
             type={'text'}

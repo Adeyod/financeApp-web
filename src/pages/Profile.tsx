@@ -7,6 +7,8 @@ import { toast } from 'react-toastify';
 import { getUserAccounts, imageProfileUpload } from '../hooks/ApiCalls';
 import { getAccountsFailure, getAccountsSuccess } from '../redux/accountSlice';
 import axios from 'axios';
+import { capitalizeFirstLetter } from '../hooks/functions';
+import { Link } from 'react-router-dom';
 
 const Profile = () => {
   const [loading, setLoading] = useState(true);
@@ -69,11 +71,11 @@ const Profile = () => {
     (state: { user: UserState }) => state.user
   );
 
+  console.log(currentUser);
+
   const { accountDetails } = useSelector(
     (state: { accounts: AccountState }) => state.accounts
   );
-
-  console.log('IMAGE:', currentUser?.profile_image?.url);
 
   const primary_account = accountDetails?.accounts?.find(
     (account) => account.is_default === true
@@ -82,7 +84,6 @@ const Profile = () => {
   const getUserAccountTransactions = async () => {
     try {
       const accountData = await getUserAccounts();
-
       const accountDetails = accountData?.data;
 
       dispatch(getAccountsSuccess(accountDetails));
@@ -155,6 +156,23 @@ const Profile = () => {
             </div>
 
             <div className="pl-2 md:text-xl lg:text-2xl">
+              <div className="flex gap-4 text-[14px]">
+                <p>
+                  <span className="uppercase font-bold text-red-500 italic">
+                    account-tier:{' '}
+                  </span>
+                  <span>
+                    {capitalizeFirstLetter(currentUser?.account_tier)}
+                  </span>
+                </p>
+
+                <Link
+                  to="#"
+                  className="bg-red-600 text-white text-[10px] font-bold animate-blink px-3 italic uppercase rounded-lg"
+                >
+                  upgrade
+                </Link>
+              </div>
               <div className="flex text-[16px] items-center gap-4">
                 <p className="text-[14px]">
                   <span className="uppercase font-bold italic">

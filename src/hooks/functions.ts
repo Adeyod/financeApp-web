@@ -22,8 +22,6 @@ const formatDate = (date = new Date()) => {
 const formattedNumber = (prop: number) => {
   const formatter = new Intl.NumberFormat('en-US');
 
-  // const convertedProp = Number(prop);
-
   const result = formatter.format(prop);
   return result;
 };

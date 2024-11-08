@@ -17,14 +17,16 @@ const PaystackCallback = () => {
   const searchParams = new URLSearchParams(location.search);
   const reference = searchParams.get('reference');
 
-  console.log('REFERENCE', reference);
+  // const reference = localStorage.getItem('transactionRef');
+
+  // console.log('REFERENCE', reference);
 
   const handleCallback = async () => {
     try {
       if (reference === null) {
         return null;
       }
-      const { data } = await callbackResult('r8rljkq18d');
+      const { data } = await callbackResult(reference);
 
       if (data) {
         toast.success(data.message);
@@ -73,7 +75,7 @@ const PaystackCallback = () => {
             Account credited successfully.
           </p>
           <GoVerified className="text-8xl my-4 text-green-600" />
-          <div className="flex items-center gap-3 justify-center">
+          {/* <div className="flex items-center gap-3 justify-center">
             <p className="text-xl md:text-2xl lg:text-4xl italic">
               If you are not redirected in 5sec, click this
             </p>
@@ -85,7 +87,7 @@ const PaystackCallback = () => {
             >
               My Accounts
             </Link>
-          </div>
+          </div> */}
         </div>
       ) : (
         <div className="flex flex-col items-center justify-center min-h-screen">

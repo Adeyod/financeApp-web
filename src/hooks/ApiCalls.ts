@@ -14,17 +14,41 @@ import {
   transferToOtherBank,
   transferToFundFlowAccount,
   singleTransactionByTransactionId,
+  paystackTransactionResponseRoute,
+  ResetPasswordRoute,
+  getReceivingFundFlowAccountNameRoute,
+  allNotificationsRoute,
+  deleteNotificationRoute,
+  singleNotificationRoute,
 } from './ApiRoutes';
 import {
-  ReceiverInfo,
+  dataObj,
+  DataToSend,
   SuccessMessage,
   TransactionDataType,
   TransactionResponse,
+  TransferDataType,
 } from '../constants/types';
 
 const header = {
   'Content-Type': 'application/json',
   'x-fund-flow': 'web-fund-flow',
+};
+
+const getFundFlowReceivingAccountName = async (account_number: string) => {
+  try {
+    const response = await axios(
+      `${getReceivingFundFlowAccountNameRoute}/${account_number}`,
+
+      {
+        headers: header,
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
 };
 
 const getAccountName = async (receivingAccount: string, bankCode: string) => {
@@ -46,15 +70,6 @@ const getAccountName = async (receivingAccount: string, bankCode: string) => {
     console.log(error);
     throw error;
   }
-};
-
-type DataToSend = {
-  narration: string;
-  bankCode: string;
-  receiving_account: string;
-  selectedAccountNumber: string;
-  amount: string;
-  receiverDetails: ReceiverInfo;
 };
 
 const makeTransferToOtherBank = async (data: DataToSend) => {
@@ -127,7 +142,11 @@ const getUserTransactions = async (
 const imageProfileUpload = async (formData: object) => {
   try {
     const result = axios.post(ImageUploadRoute, formData, {
-      headers: header,
+      headers: {
+        ...header,
+        Accept: 'application/json',
+        'Content-Type': 'multipart/form-data',
+      },
     });
     return result;
   } catch (error) {
@@ -248,9 +267,14 @@ const fetchBankDetails = async () => {
 
 const createNewAccountNumber = async () => {
   try {
-    const response = await axios.post(createAccountRoute, {
-      headers: header,
-    });
+    console.log('creating account number');
+    const response = await axios.post(
+      createAccountRoute,
+      {},
+      {
+        headers: header,
+      }
+    );
     console.log('ApiCall create account:', response);
     return response;
   } catch (error) {
@@ -297,13 +321,6 @@ const callbackResult = async (reference: string) => {
   }
 };
 
-type TransferDataType = {
-  receiving_account_number: string;
-  amount: string;
-  selected_account_number: string;
-  description: string;
-};
-
 const makeTransferToFundFlowAccount = async ({
   receiving_account_number,
   amount,
@@ -330,7 +347,90 @@ const makeTransferToFundFlowAccount = async ({
   }
 };
 
+const getTransactionResponse = async (reference: string) => {
+  try {
+    const response = await axios(
+      `${paystackTransactionResponseRoute}/${reference}`
+    );
+
+    return response;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+const resetPasswordProcess = async (dataObj: dataObj) => {
+  console.log('DATA OBJECT: ', dataObj);
+  const { token, userId, ...rest } = dataObj;
+
+  try {
+    const response = await axios.post(
+      `${ResetPasswordRoute}?userId=${userId}&token=${token}`,
+      rest,
+      {
+        headers: header,
+      }
+    );
+
+    return response;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+const getNotifications = async () => {
+  try {
+    const response = await axios(allNotificationsRoute, {
+      headers: header,
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+const getSingleNotification = async (notification_id: string) => {
+  try {
+    const response = await axios(
+      `${singleNotificationRoute}/${notification_id}`,
+      {
+        headers: header,
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+const deleteNotification = async (notification_id: string) => {
+  try {
+    const response = await axios(
+      `${deleteNotificationRoute}/${notification_id}`,
+      {
+        headers: header,
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
 export {
+  getNotifications,
+  getSingleNotification,
+  deleteNotification,
+  getFundFlowReceivingAccountName,
+  resetPasswordProcess,
   makeTransferToFundFlowAccount,
   getUserSingleAccountTransactionsWithoutQuery,
   // getAccountDetailsAndTransactions,
@@ -347,4 +447,5 @@ export {
   getSingleTransactionByTransactionId,
   imageProfileUpload,
   fetchBankDetails,
+  getTransactionResponse,
 };

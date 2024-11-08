@@ -40,6 +40,8 @@ const OtherBanks = ({ selectedAccountNumber }: FundFlowProp) => {
     bank_code: '',
   });
 
+  // console.log('BANK:', bank)
+
   const dataToSend = {
     narration: narration,
     bankCode: bankCode,

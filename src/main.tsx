@@ -8,8 +8,9 @@ import 'react-toastify/dist/ReactToastify.css';
 import { Provider } from 'react-redux';
 import { store } from './redux/store.ts';
 
+// <React.StrictMode>
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
+  <>
     <ToastContainer
       position="top-right"
       autoClose={5000}
@@ -27,5 +28,8 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <App />
       </Provider>
     </BrowserRouter>
-  </React.StrictMode>
+  </>
 );
+{
+  /* </React.StrictMode> */
+}

@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { IoMdMenu, IoMdClose } from 'react-icons/io';
+import { IoNotifications } from 'react-icons/io5';
+
 import { useDispatch, useSelector } from 'react-redux';
 import { checkTokenExpiration } from '../hooks/authChecker';
 import axios from 'axios';
@@ -9,7 +11,13 @@ import { loginFailure, loginStart, logoutSuccess } from '../redux/userSlice';
 import { toast } from 'react-toastify';
 import { clearAccounts } from '../redux/accountSlice';
 import { clearTransactions } from '../redux/transactionSlice';
-import { UserState } from '../constants/types';
+import {
+  NotificationProp,
+  NotificationState,
+  UserState,
+} from '../constants/types';
+import { getNotifications } from '../hooks/ApiCalls';
+import { getNotificationsSuccess } from '../redux/notificationSlice';
 
 const NavBar = () => {
   const [toggle, setToggle] = useState(false);
@@ -21,6 +29,14 @@ const NavBar = () => {
   const { currentUser, access } = useSelector(
     (state: { user: UserState }) => state.user
   );
+
+  const { userNotifications } = useSelector(
+    (state: { notifications: NotificationState }) => state.notifications
+  );
+
+  const newNotifications = userNotifications.filter(
+    (notification: NotificationProp) => notification.is_read === false
+  ).length;
 
   const handleFixed = () => {
     if (window.scrollY > 10) {
@@ -52,6 +68,28 @@ const NavBar = () => {
       }
     }
   };
+
+  const getAllNotifications = async () => {
+    try {
+      const response = await getNotifications();
+      console.log(response);
+      dispatch(getNotificationsSuccess(response?.notifications));
+      return;
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error) && error.response) {
+        console.error(error.response.data.message);
+        toast.error(error.response.data.message);
+        dispatch(loginFailure(error));
+      } else {
+        console.error('An error occurred:', error);
+        toast.error('An error occurred:');
+      }
+    }
+  };
+
+  useEffect(() => {
+    getAllNotifications();
+  }, []);
 
   useEffect(() => {
     window.addEventListener('scroll', handleFixed);
@@ -89,7 +127,15 @@ const NavBar = () => {
         <div className="">
           <div className="hidden md:flex gap-3 text-xl">
             {currentUser && currentUser !== null ? (
-              <div className="gap-4 flex">
+              <div className="gap-3 items-center flex">
+                <div className="relative">
+                  <p className="absolute rounded-full px-2 bg-red-600 font-bold text-xl top-[-15px]">
+                    {newNotifications}
+                  </p>
+                  <Link to="/notifications">
+                    <IoNotifications className="text-3xl" />
+                  </Link>
+                </div>
                 <Link to="/profile">
                   <img
                     className="w-8 h-8 rounded-full"
@@ -101,6 +147,7 @@ const NavBar = () => {
                     alt=""
                   />
                 </Link>
+
                 <button onClick={handleLogout}>Logout</button>
               </div>
             ) : (
@@ -132,6 +179,8 @@ const NavBar = () => {
                   <Link to="/profile" className="">
                     Profile
                   </Link>
+
+                  <Link to="/notifications">Notifications</Link>
 
                   <Link to="/change-password" className="">
                     Change Password

@@ -1,17 +1,26 @@
 import { IoMdClose, IoMdMenu } from 'react-icons/io';
 import { FcPortraitMode } from 'react-icons/fc';
 import { useSelector } from 'react-redux';
-import { Link, useLocation } from 'react-router-dom';
-import { UserState } from '../constants/types';
+import { Link } from 'react-router-dom';
+import { SidebarProp, UserState } from '../constants/types';
 import { useState } from 'react';
 
-const Sidebar = () => {
+const Sidebar = ({ transactionClick, setTransactionClick }: SidebarProp) => {
   const [toggle, setToggle] = useState(false);
   const { currentUser } = useSelector(
     (state: { user: UserState }) => state.user
   );
 
-  const location = useLocation();
+  console.log(transactionClick);
+
+  // const location = useLocation();
+
+  const handleClick = () => {
+    if (!setTransactionClick) {
+      return;
+    }
+    setTransactionClick(true);
+  };
 
   const handleToggle = () => {
     setToggle(!toggle);
@@ -50,14 +59,7 @@ const Sidebar = () => {
               </span>
             </Link>
 
-            <Link to="/transactions">
-              <span className={toggle ? 'block' : 'hidden'}>
-                <FcPortraitMode className="text-xl " />
-              </span>
-              <span className={toggle ? 'hidden' : 'block'}>Transactions</span>
-            </Link>
-
-            <Link to={location.search}>
+            <Link onClick={handleClick} to="/transactions">
               <span className={toggle ? 'block' : 'hidden'}>
                 <FcPortraitMode className="text-xl " />
               </span>

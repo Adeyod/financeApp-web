@@ -88,7 +88,13 @@ const MyAccountsPage = () => {
           <button
             type="submit"
             onClick={handleCreateAccount}
-            className="border bg-secondary p-2 mt-4 rounded-lg text-white uppercase font-bold italic"
+            disabled={accountDetails?.accounts?.length === 5}
+            className={[
+              accountDetails?.accounts?.length === 5
+                ? 'bg-gray-300'
+                : 'bg-secondary',
+              'border p-2 mt-4 rounded-lg text-white uppercase font-bold italic',
+            ].join(' ')}
           >
             {loading ? 'LOADING...' : 'create account'}
           </button>

@@ -19,7 +19,7 @@ const EmailVerification = () => {
   const handleVerification = async () => {
     try {
       const { data } = await axios.get(
-        `${EmailVerificationRoute}/${userId}/${token}`
+        `${EmailVerificationRoute}?userId=${userId}&token=${token}`
       );
       if (data.success) {
         toast.success(data.message);

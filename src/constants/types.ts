@@ -12,6 +12,11 @@ export type FundFlowProp = {
   selectedAccountNumber: string;
 };
 
+export type ReceiverProp = {
+  first_name: string;
+  last_name: string;
+};
+
 export type ResetPasswordData = {
   password: string;
   confirm_password: string;
@@ -110,6 +115,15 @@ export type ReceiverInfo = {
   bank_code: string;
 };
 
+export type DataToSend = {
+  narration: string;
+  bankCode: string;
+  receiving_account: string;
+  selectedAccountNumber: string;
+  amount: string;
+  receiverDetails: ReceiverInfo;
+};
+
 export type CreditOptionsType = {
   // accountTransactions: AccountInfoType;
   accountInfo: {
@@ -188,6 +202,7 @@ export type UserState = {
     created_at: string;
     updated_at: string;
     is_phone_verified: boolean;
+    account_tier: string;
     profile_image: {
       url: string;
       public_id: string;
@@ -197,6 +212,21 @@ export type UserState = {
   access: string;
   loading: boolean;
   error: null;
+};
+
+export type NotificationProp = {
+  id: string;
+  is_read: boolean;
+  created_at: string;
+  updated_at: string;
+  message: string;
+  receiver: string;
+  title: string;
+  user_id: string;
+};
+
+export type NotificationState = {
+  userNotifications: NotificationProp[];
 };
 
 export type AccountState = {
@@ -220,6 +250,25 @@ export type AccountState = {
 
   loading: boolean;
   error: boolean;
+};
+
+export type TransferDataType = {
+  receiving_account_number: string;
+  amount: string;
+  selected_account_number: string;
+  description: string;
+};
+
+export type dataObj = {
+  password: string;
+  confirm_password: string;
+  token: string;
+  userId: string;
+};
+
+export type SidebarProp = {
+  transactionClick: boolean;
+  setTransactionClick?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export type SearchProp = {

@@ -174,13 +174,19 @@ import MyAccountsPage from './pages/MyAccountsPage';
 import TransferPage from './pages/TransferPage';
 import PaystackCallback from './pages/PaystackCallback';
 import AccountDetailsPage from './pages/AccountDetailsPage';
+import { useState } from 'react';
 
 function App() {
+  const [transactionClick, setTransactionClick] = useState(false);
+  console.log(transactionClick);
   return (
     <>
       <NavBar />
       <div className="flex h-screen ">
-        <Sidebar />
+        <Sidebar
+          transactionClick={transactionClick}
+          setTransactionClick={setTransactionClick}
+        />
 
         <div className="flex-grow overflow-y-auto">
           <Routes>
@@ -196,7 +202,12 @@ function App() {
               <Route path="/call-back" element={<PaystackCallback />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/change-password" element={<ChangePassword />} />
-              <Route path="/transactions" element={<TransactionsPage />} />
+              <Route
+                path="/transactions"
+                element={
+                  <TransactionsPage transactionClick={transactionClick} />
+                }
+              />
               <Route
                 path="/transaction/:transactionId"
                 element={<TransactionDetails />}

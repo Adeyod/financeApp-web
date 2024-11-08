@@ -12,6 +12,7 @@ import { AccountState, TransactionState, UserState } from '../constants/types';
 import { capitalizeFirstLetter } from '../hooks/functions';
 import {
   creditUserAccount,
+  // getTransactionResponse,
   getUserSingleAccountDetailsByAccountNumber,
   getUserSingleAccountTransactionsWithoutQuery,
 } from '../hooks/ApiCalls';
@@ -117,12 +118,16 @@ const CreditAccountPage = () => {
       const result = await creditUserAccount(account_number, amount);
       console.log(result);
       if (result && result?.data?.data?.authorization_url) {
-        console.log(result);
+        console.log(result.data?.data?.authorization_url);
 
         setAmount('');
         setSelectedAccountNumber('');
 
+        localStorage.setItem('transactionRef', result.data?.data?.reference);
+
         window.location.href = result.data?.data?.authorization_url;
+
+        // pollTransactionStatus(result.data?.data?.reference);
         return;
       }
     } catch (error: unknown) {
@@ -137,6 +142,26 @@ const CreditAccountPage = () => {
       setLoading(false);
     }
   };
+
+  // const pollTransactionStatus = (reference: string) => {
+  //   console.log('I am polling transaction status');
+  //   const intervalId = setInterval(async () => {
+  //     try {
+  //       const response = await getTransactionResponse(reference);
+  //       const { status } = response.data.data;
+  //       console.log('CREDIT STATUS:', status);
+  //       if (status) {
+  //         clearInterval(intervalId);
+  //         window.location.href = `/call-back?reference=${reference}`;
+  //       }
+  //     } catch (error) {
+  //       console.error(error);
+  //       clearInterval(intervalId);
+  //       toast.error('An error occurred');
+  //     }
+  //   }, 5000);
+  // };
+
   const handleAccountChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedAccountNumber(e.target.value);
   };
