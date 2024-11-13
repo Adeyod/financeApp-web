@@ -34,9 +34,9 @@ const NavBar = () => {
     (state: { notifications: NotificationState }) => state.notifications
   );
 
-  const newNotifications = userNotifications.filter(
-    (notification: NotificationProp) => notification.is_read === false
-  ).length;
+  // const newNotifications = userNotifications.filter(
+  //   (notification: NotificationProp) => notification.is_read === false
+  // ).length;
 
   const handleFixed = () => {
     if (window.scrollY > 10) {
@@ -130,7 +130,7 @@ const NavBar = () => {
               <div className="gap-3 items-center flex">
                 <div className="relative">
                   <p className="absolute rounded-full px-2 bg-red-600 font-bold text-xl top-[-15px]">
-                    {newNotifications}
+                    {/* {newNotifications} */}9
                   </p>
                   <Link to="/notifications">
                     <IoNotifications className="text-3xl" />

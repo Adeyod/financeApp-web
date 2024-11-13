@@ -23,6 +23,7 @@ const Button = ({
       <button
         className={typeof buttonStyle === 'string' ? buttonStyle : undefined}
         style={typeof buttonStyle === 'object' ? buttonStyle : undefined}
+        disabled={loading}
       >
         {loading ? 'LOADING...' : `${title}`}
       </button>
