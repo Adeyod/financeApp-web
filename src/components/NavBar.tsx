@@ -11,11 +11,7 @@ import { loginFailure, loginStart, logoutSuccess } from '../redux/userSlice';
 import { toast } from 'react-toastify';
 import { clearAccounts } from '../redux/accountSlice';
 import { clearTransactions } from '../redux/transactionSlice';
-import {
-  NotificationProp,
-  NotificationState,
-  UserState,
-} from '../constants/types';
+import { UserState } from '../constants/types';
 import { getNotifications } from '../hooks/ApiCalls';
 import { getNotificationsSuccess } from '../redux/notificationSlice';
 
@@ -30,9 +26,9 @@ const NavBar = () => {
     (state: { user: UserState }) => state.user
   );
 
-  const { userNotifications } = useSelector(
-    (state: { notifications: NotificationState }) => state.notifications
-  );
+  // const { userNotifications } = useSelector(
+  //   (state: { notifications: NotificationState }) => state.notifications
+  // );
 
   // const newNotifications = userNotifications.filter(
   //   (notification: NotificationProp) => notification.is_read === false
