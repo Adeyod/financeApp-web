@@ -256,6 +256,7 @@ export type NotificationState = {
   userNotifications: NotificationProp[];
   totalIsViewed: number;
   totalNotificationsCount: number;
+  singleUserNotification: NotificationProp;
 };
 
 export type AccountState = {
