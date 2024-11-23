@@ -15,6 +15,10 @@ const initialState = {
   singleUserNotification: safelyParseJSON(
     localStorage.getItem('singleUserNotification')
   ),
+  totalIsViewed: safelyParseJSON(localStorage.getItem('totalIsViewed')),
+  totalNotificationsCount: safelyParseJSON(
+    localStorage.getItem('totalNotificationsCount')
+  ),
   loading: false,
   error: null,
 };
@@ -25,21 +29,30 @@ const notificationSlice = createSlice({
   reducers: {
     getNotificationsSuccess(state, action) {
       state.loading = false;
-      const userNotifications = action.payload;
+      const { totalCount, totalIsViewed, notifications } = action.payload;
+      const userNotifications = notifications;
 
       state.userNotifications = userNotifications;
-      console.log(userNotifications);
+      state.totalNotificationsCount = totalCount;
+      state.totalIsViewed = totalIsViewed;
 
       localStorage.setItem(
         'userNotifications',
         JSON.stringify(state.userNotifications)
       );
+      localStorage.setItem(
+        'totalIsViewed',
+        JSON.stringify(state.totalIsViewed)
+      );
+      localStorage.setItem(
+        'totalNotificationsCount',
+        JSON.stringify(state.totalNotificationsCount)
+      );
     },
 
     getSingleNotificationSuccess(state, action) {
       state.loading = false;
-      const singleUserNotification = action.payload;
-      state.singleUserNotification = singleUserNotification;
+      state.singleUserNotification = action.payload;
 
       localStorage.setItem(
         'singleUserNotification',
@@ -59,6 +72,13 @@ const notificationSlice = createSlice({
     clearNotifications(state) {
       state.userNotifications = null;
       state.singleUserNotification = null;
+      state.totalIsViewed = null;
+      state.totalNotificationsCount = null;
+
+      localStorage.removeItem('userNotifications');
+      localStorage.removeItem('singleUserNotification');
+      localStorage.removeItem('totalIsViewed');
+      localStorage.removeItem('totalNotificationsCount');
     },
   },
 });

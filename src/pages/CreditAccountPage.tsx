@@ -12,7 +12,7 @@ import { AccountState, TransactionState, UserState } from '../constants/types';
 import { capitalizeFirstLetter } from '../hooks/functions';
 import {
   creditUserAccount,
-  // getTransactionResponse,
+  getNotifications,
   getUserSingleAccountDetailsByAccountNumber,
   getUserSingleAccountTransactionsWithoutQuery,
 } from '../hooks/ApiCalls';
@@ -20,6 +20,7 @@ import { toast } from 'react-toastify';
 import { getSingleAccountTransactionsSuccess } from '../redux/transactionSlice';
 import { getSingleAccountSuccess } from '../redux/accountSlice';
 import axios from 'axios';
+import { getNotificationsSuccess } from '../redux/notificationSlice';
 
 const CreditAccountPage = () => {
   const dispatch = useDispatch();
@@ -36,6 +37,10 @@ const CreditAccountPage = () => {
   const { currentUser } = useSelector(
     (state: { user: UserState }) => state.user
   );
+
+  const [searchValue] = useState('');
+  const [page] = useState(1);
+  const limit = '10';
 
   const {
     // singleAccountTransactionDetails,
@@ -59,8 +64,13 @@ const CreditAccountPage = () => {
 
       if (response) {
         toast.success(response?.message);
+        const result = await getNotifications(
+          page.toString(),
+          limit,
+          searchValue
+        );
+        dispatch(getNotificationsSuccess(result?.notifications));
         dispatch(getSingleAccountTransactionsSuccess(response));
-        console.log('CREDIT PAGE:', response.transactions);
 
         return;
       }
@@ -142,25 +152,6 @@ const CreditAccountPage = () => {
       setLoading(false);
     }
   };
-
-  // const pollTransactionStatus = (reference: string) => {
-  //   console.log('I am polling transaction status');
-  //   const intervalId = setInterval(async () => {
-  //     try {
-  //       const response = await getTransactionResponse(reference);
-  //       const { status } = response.data.data;
-  //       console.log('CREDIT STATUS:', status);
-  //       if (status) {
-  //         clearInterval(intervalId);
-  //         window.location.href = `/call-back?reference=${reference}`;
-  //       }
-  //     } catch (error) {
-  //       console.error(error);
-  //       clearInterval(intervalId);
-  //       toast.error('An error occurred');
-  //     }
-  //   }, 5000);
-  // };
 
   const handleAccountChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedAccountNumber(e.target.value);

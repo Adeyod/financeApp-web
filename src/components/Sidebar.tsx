@@ -1,25 +1,40 @@
 import { IoMdClose, IoMdMenu } from 'react-icons/io';
-import { FcPortraitMode } from 'react-icons/fc';
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { SidebarProp, UserState } from '../constants/types';
+import { UserState } from '../constants/types';
 import { useState } from 'react';
+import GeneralSidebar from './SidebarComponents/GeneralSidebar';
+import AdminSidebar from './SidebarComponents/AdminSidebar';
+import SuperAdminSidebar from './SidebarComponents/SuperAdminSidebar';
+import LogoutComponent from './LogoutComponent';
 
-const Sidebar = ({ transactionClick, setTransactionClick }: SidebarProp) => {
+const Sidebar = () => {
   const [toggle, setToggle] = useState(false);
+  const [generalMenuOpen, setGeneralMenuOpen] = useState(false);
+  const [adminMenuOpen, setAdminMenuOpen] = useState(false);
+  const [superAdminMenuOpen, setSuperAdminMenuOpen] = useState(false);
+
+  const handleLogout = LogoutComponent();
+
   const { currentUser } = useSelector(
     (state: { user: UserState }) => state.user
   );
 
-  console.log(transactionClick);
+  if (currentUser?.role === 'admin') {
+    console.log(currentUser?.role);
+  } else {
+    console.log('this is not true');
+  }
 
-  // const location = useLocation();
+  const handleSuperAdminMenuToggle = () => {
+    setSuperAdminMenuOpen(!superAdminMenuOpen);
+  };
 
-  const handleClick = () => {
-    if (!setTransactionClick) {
-      return;
-    }
-    setTransactionClick(true);
+  const handleGeneralMenuToggle = () => {
+    setGeneralMenuOpen(!generalMenuOpen);
+  };
+
+  const handleAdminMenuToggle = () => {
+    setAdminMenuOpen(!adminMenuOpen);
   };
 
   const handleToggle = () => {
@@ -31,7 +46,7 @@ const Sidebar = ({ transactionClick, setTransactionClick }: SidebarProp) => {
       <div
         className={[
           toggle ? 'w-10' : 'min-w-[180px]',
-          ' bg-secondary h-full relative bottom-0 transition-all duration-300 hidden md:flex',
+          ' bg-secondary h-full relative bottom-0 mb-32 transition-all duration-300 hidden md:flex overflow-y-auto',
         ].join(' ')}
       >
         <div className="absolute right-3 top-3" onClick={handleToggle}>
@@ -42,61 +57,44 @@ const Sidebar = ({ transactionClick, setTransactionClick }: SidebarProp) => {
           )}
         </div>
 
-        {currentUser && (
-          <div className="flex flex-col items-start mx-5 mt-10 gap-3 font-bold text-white">
-            <Link to="/profile">
-              <span className={toggle ? 'block' : 'hidden'}>
-                <FcPortraitMode className="text-xl" />
-              </span>
-              <span className={toggle ? 'hidden' : 'block'}>Profile</span>
-            </Link>
-            <Link to="/change-password" className="flex flex-col items-center">
-              <span className={toggle ? 'block' : 'hidden'}>
-                <FcPortraitMode className="text-xl " />
-              </span>
-              <span className={toggle ? 'hidden' : 'block'}>
-                Change Password
-              </span>
-            </Link>
+        <div className="mt-10">
+          {currentUser && (
+            <GeneralSidebar
+              handleGeneralMenuToggle={handleGeneralMenuToggle}
+              generalMenuOpen={generalMenuOpen}
+              toggle={toggle}
+            />
+          )}
 
-            <Link onClick={handleClick} to="/transactions">
-              <span className={toggle ? 'block' : 'hidden'}>
-                <FcPortraitMode className="text-xl " />
-              </span>
-              <span className={toggle ? 'hidden' : 'block'}>Transactions</span>
-            </Link>
+          {(currentUser?.role === 'admin' ||
+            currentUser?.role === 'super_admin') && (
+            <AdminSidebar
+              toggle={toggle}
+              handleAdminMenuToggle={handleAdminMenuToggle}
+              adminMenuOpen={adminMenuOpen}
+            />
+          )}
 
-            <Link to="/accounts">
-              <span className={toggle ? 'block' : 'hidden'}>
-                <FcPortraitMode className="text-xl " />
-              </span>
-              <span className={toggle ? 'hidden' : 'block'}>My Accounts</span>
-            </Link>
+          {currentUser?.role === 'super_admin' && (
+            <SuperAdminSidebar
+              toggle={toggle}
+              handleSuperAdminMenuToggle={handleSuperAdminMenuToggle}
+              superAdminMenuOpen={superAdminMenuOpen}
+            />
+          )}
 
-            <Link to="/credit">
-              <span className={toggle ? 'block' : 'hidden'}>
-                <FcPortraitMode className="text-xl " />
-              </span>
-              <span className={toggle ? 'hidden' : 'block'}>
-                Credit Account
-              </span>
-            </Link>
-
-            <Link to="/transfer">
-              <span className={toggle ? 'block' : 'hidden'}>
-                <FcPortraitMode className="text-xl " />
-              </span>
-              <span className={toggle ? 'hidden' : 'block'}>
-                Transfer funds
-              </span>
-            </Link>
-          </div>
-        )}
+          {currentUser && (
+            <button
+              className="text-red-800 mt-5 font-bold mb-32 ml-5 text-[12px] smm:text-[15px] mng:text-[18px]"
+              onClick={handleLogout}
+            >
+              Logout
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );
 };
 
 export default Sidebar;
-
-///////////////////////////////////////////////////

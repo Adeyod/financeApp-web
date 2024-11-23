@@ -4,11 +4,16 @@ import Spinner from '../components/Spinner';
 import { loginSuccess } from '../redux/userSlice';
 import { AccountState, UserState } from '../constants/types';
 import { toast } from 'react-toastify';
-import { getUserAccounts, imageProfileUpload } from '../hooks/ApiCalls';
+import {
+  getNotifications,
+  getUserAccounts,
+  imageProfileUpload,
+} from '../hooks/ApiCalls';
 import { getAccountsFailure, getAccountsSuccess } from '../redux/accountSlice';
 import axios from 'axios';
 import { capitalizeFirstLetter } from '../hooks/functions';
 import { Link } from 'react-router-dom';
+import { getNotificationsSuccess } from '../redux/notificationSlice';
 
 const Profile = () => {
   const [loading, setLoading] = useState(true);
@@ -18,6 +23,10 @@ const Profile = () => {
 
   const fileRef = useRef<HTMLInputElement | null>(null);
   const dispatch = useDispatch();
+
+  const [searchValue] = useState('');
+  const [page] = useState(1);
+  const limit = '10';
 
   const uploadImage = async () => {
     try {
@@ -34,6 +43,12 @@ const Profile = () => {
       const { data } = await imageProfileUpload(formData);
 
       if (data) {
+        const result = await getNotifications(
+          page.toString(),
+          limit,
+          searchValue
+        );
+        dispatch(getNotificationsSuccess(result?.notifications));
         toast.success(data.message);
         dispatch(loginSuccess(data));
         return;

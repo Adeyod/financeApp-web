@@ -130,7 +130,7 @@ const transactionSlice = createSlice({
       localStorage.removeItem('transactionDetails');
       localStorage.removeItem('totalTransactionsCount');
 
-      localStorage.removeItem('singleAccountTotalTransactions');
+      localStorage.removeItem('singleAccountTotalTransactionsCount');
       localStorage.removeItem('singleAccountCompletedTransactionsCount');
 
       localStorage.removeItem('singleAccountTransactionDetails');

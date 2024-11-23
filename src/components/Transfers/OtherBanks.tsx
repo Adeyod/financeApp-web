@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import {
   fetchBankDetails,
   getAccountName,
+  getNotifications,
   makeTransferToOtherBank,
 } from '../../hooks/ApiCalls';
 import Spinner from '../Spinner';
@@ -21,9 +22,12 @@ import {
 import Button from '../Button';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { getNotificationsSuccess } from '../../redux/notificationSlice';
+import { useDispatch } from 'react-redux';
 
 const OtherBanks = ({ selectedAccountNumber }: FundFlowProp) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [banks, setBanks] = useState<BankProps[]>([]);
   const [loading, setLoading] = useState(true);
   const [amLoading, setAmLoading] = useState(false);
@@ -40,7 +44,9 @@ const OtherBanks = ({ selectedAccountNumber }: FundFlowProp) => {
     bank_code: '',
   });
 
-  // console.log('BANK:', bank)
+  const [searchValue] = useState('');
+  const [page] = useState(1);
+  const limit = '10';
 
   const dataToSend = {
     narration: narration,
@@ -180,15 +186,19 @@ const OtherBanks = ({ selectedAccountNumber }: FundFlowProp) => {
       if (!receivingAccount) {
         console.error('Please select the receiving account');
         toast.error('Please select the receiving account');
-        // return;
+        return;
       }
 
       const response = await makeTransferToOtherBank(dataToSend);
+      console.log('resonse: ', response);
 
       if (response) {
-        // setReceiverDetails(response?.receiverDetails);
-        // console.log(receivingAccount);
-        // console.log(receiverDetails);
+        const result = await getNotifications(
+          page.toString(),
+          limit,
+          searchValue
+        );
+        dispatch(getNotificationsSuccess(result?.notifications));
         navigate('/transactions');
         return;
       }

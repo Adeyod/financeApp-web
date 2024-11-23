@@ -19,11 +19,26 @@ import {
   getReceivingFundFlowAccountNameRoute,
   allNotificationsRoute,
   deleteNotificationRoute,
+  deleteManyNotificationRoute,
   singleNotificationRoute,
+  markNotificationAsViewedRoute,
+  markNotificationAsReadRoute,
+  allAccountsRoute,
+  allTransactionsRoute,
+  allCustomersRoute,
+  getSingleAccountOfAUserForAdminRoute,
+  getSingleCustomerForAdminRoute,
+  getSingleTransactionOfAUserForAdminRoute,
+  allAdminsRoute,
+  getSingleAdminForSuperAdminRoute,
+  removeAdminRoute,
 } from './ApiRoutes';
 import {
+  AccountDataType,
+  CustomerDataType,
   dataObj,
   DataToSend,
+  SingleAccountFetchProp,
   SuccessMessage,
   TransactionDataType,
   TransactionResponse,
@@ -109,13 +124,166 @@ const getUserAccounts = async () => {
   }
 };
 
-// const getAccountDetailsAndTransactions = async (account_id: string) => {
-//   try {
-//   } catch (error) {
-//     console.log(error);
-//     throw error;
-//   }
-// };
+const getPlatformAccounts = async (
+  page: string,
+  limit: string,
+  searchValue: string
+): Promise<AccountDataType> => {
+  try {
+    const accounts = await axios.get<AccountDataType>(
+      `${allAccountsRoute}?searchParams=${searchValue}&page=${page}&limit=${limit}`,
+      {
+        headers: header,
+      }
+    );
+    return accounts.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+const getSingleAccountOfAUserForAdmin = async ({
+  user_id,
+  account_id,
+}: SingleAccountFetchProp) => {
+  try {
+    const response = await axios(
+      `${getSingleAccountOfAUserForAdminRoute}${user_id}/${account_id}`,
+      {
+        headers: header,
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+const getSingleTransactionOfAUserForAdmin = async (transaction_id: string) => {
+  try {
+    const response = await axios(
+      `${getSingleTransactionOfAUserForAdminRoute}${transaction_id}`,
+      {
+        headers: header,
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+const getSingleCustomerForAdmin = async (customer_id: string) => {
+  try {
+    const response = await axios(
+      `${getSingleCustomerForAdminRoute}${customer_id}`,
+      {
+        headers: header,
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+const getSingleAdminForSuperAdmin = async (admin_id: string) => {
+  try {
+    const response = await axios(
+      `${getSingleAdminForSuperAdminRoute}${admin_id}`,
+      {
+        headers: header,
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+const getPlatformTransactions = async (
+  page: string,
+  limit: string,
+  searchValue: string
+): Promise<TransactionDataType> => {
+  try {
+    const transactions = await axios.get<TransactionDataType>(
+      `${allTransactionsRoute}?searchParams=${searchValue}&page=${page}&limit=${limit}`,
+      {
+        headers: header,
+      }
+    );
+    return transactions.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+const getPlatformCustomers = async (
+  page: string,
+  limit: string,
+  searchValue: string
+): Promise<CustomerDataType> => {
+  try {
+    const customers = await axios.get<CustomerDataType>(
+      `${allCustomersRoute}?searchParams=${searchValue}&page=${page}&limit=${limit}`,
+      {
+        headers: header,
+      }
+    );
+    return customers.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+const getPlatformAdmins = async (
+  page: string,
+  limit: string,
+  searchValue: string
+): Promise<CustomerDataType> => {
+  try {
+    const admins = await axios.get<CustomerDataType>(
+      `${allAdminsRoute}?searchParams=${searchValue}&page=${page}&limit=${limit}`,
+      {
+        headers: header,
+      }
+    );
+    return admins.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+const reduceAdminToCustomer = async (
+  admin_id: string
+): Promise<CustomerDataType> => {
+  try {
+    const admins = await axios.put<CustomerDataType>(
+      `${removeAdminRoute}${admin_id}`,
+      {},
+      {
+        headers: header,
+      }
+    );
+    return admins.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
 
 const getUserTransactions = async (
   page: string,
@@ -326,13 +494,16 @@ const makeTransferToFundFlowAccount = async ({
   amount,
   selected_account_number,
   description,
+  receiver_account_name,
 }: TransferDataType) => {
   try {
+    console.log(receiver_account_name);
     const dataObj = {
       receiving_account_number,
       amount,
       selected_account_number,
       description,
+      receiver_account_name,
     };
     const response = await axios.post(transferToFundFlowAccount, dataObj, {
       headers: header,
@@ -380,11 +551,53 @@ const resetPasswordProcess = async (dataObj: dataObj) => {
   }
 };
 
-const getNotifications = async () => {
+const getNotifications = async (
+  page: string,
+  limit: string,
+  searchValue: string
+) => {
   try {
-    const response = await axios(allNotificationsRoute, {
-      headers: header,
-    });
+    const response = await axios(
+      `${allNotificationsRoute}?searchParams=${searchValue}&page=${page}&limit=${limit}`,
+      {
+        headers: header,
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+const markNotificationsAsViewed = async () => {
+  try {
+    const response = await axios.put(
+      markNotificationAsViewedRoute,
+      {},
+      {
+        headers: header,
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+const markANotificationAsRead = async (notification_id: string) => {
+  console.log(notification_id);
+  try {
+    const response = await axios.put(
+      `${markNotificationAsReadRoute}${notification_id}`,
+      {},
+      {
+        headers: header,
+      }
+    );
 
     return response.data;
   } catch (error) {
@@ -409,10 +622,28 @@ const getSingleNotification = async (notification_id: string) => {
   }
 };
 
-const deleteNotification = async (notification_id: string) => {
+const deleteNotification = async (notification_id: number) => {
   try {
-    const response = await axios(
-      `${deleteNotificationRoute}/${notification_id}`,
+    const id = notification_id.toString();
+    const response = await axios.delete(`${deleteNotificationRoute}/${id}`, {
+      headers: header,
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+const deleteManyNotifications = async (notification_ids: number[]) => {
+  try {
+    console.log('deleteManyNotifications:', notification_ids);
+    const response = await axios.post(
+      deleteManyNotificationRoute,
+      {
+        notification_ids,
+      },
       {
         headers: header,
       }
@@ -426,6 +657,18 @@ const deleteNotification = async (notification_id: string) => {
 };
 
 export {
+  reduceAdminToCustomer,
+  deleteManyNotifications,
+  getSingleAdminForSuperAdmin,
+  getPlatformAdmins,
+  getSingleTransactionOfAUserForAdmin,
+  getSingleCustomerForAdmin,
+  getSingleAccountOfAUserForAdmin,
+  getPlatformAccounts,
+  getPlatformTransactions,
+  getPlatformCustomers,
+  markANotificationAsRead,
+  markNotificationsAsViewed,
   getNotifications,
   getSingleNotification,
   deleteNotification,
@@ -433,7 +676,6 @@ export {
   resetPasswordProcess,
   makeTransferToFundFlowAccount,
   getUserSingleAccountTransactionsWithoutQuery,
-  // getAccountDetailsAndTransactions,
   makeTransferToOtherBank,
   getAccountName,
   getUserSingleAccountDetailsByAccountNumber,

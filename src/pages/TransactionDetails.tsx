@@ -64,10 +64,8 @@ const TransactionDetails = () => {
                   <span className="uppercase font-bold italic">Amount: </span>
                   {
                     singleTransactionDetails?.transaction_type === 'debit' && (
-                      // <div className="">
                       <span className="text-2xl">-</span>
                     )
-                    // </div>
                   }
                   #{formattedNumber(Number(singleTransactionDetails?.amount))}
                 </p>

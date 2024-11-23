@@ -20,7 +20,9 @@ import Spinner from '../components/Spinner';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { joiResetPasswordValidationSchema } from '../hooks/validation';
-import { resetPasswordProcess } from '../hooks/ApiCalls';
+import { getNotifications, resetPasswordProcess } from '../hooks/ApiCalls';
+import { getNotificationsSuccess } from '../redux/notificationSlice';
+import { useDispatch } from 'react-redux';
 
 const resetPasswordParams: ResetPasswordParams[] = [
   {
@@ -41,6 +43,7 @@ const resetPasswordParams: ResetPasswordParams[] = [
 
 const ResetPassword = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState<ResetPasswordData>({
     password: '',
@@ -51,6 +54,10 @@ const ResetPassword = () => {
   const userId = searchParams.get('userId') || '';
   const token = searchParams.get('token') || '';
   const expiresAt = searchParams.get('expiresAt');
+
+  const [searchValue] = useState('');
+  const [page] = useState(1);
+  const limit = '10';
 
   const currentTime = Date.now();
   let expireTime = null;
@@ -91,6 +98,13 @@ const ResetPassword = () => {
 
       axios.post(`${ResetPasswordRoute}/${userId}/${token}`, formData);
       if (data.success) {
+        const result = await getNotifications(
+          page.toString(),
+          limit,
+          searchValue
+        );
+        dispatch(getNotificationsSuccess(result?.notifications));
+
         toast.success(data.message);
         navigate('/login');
         return;

@@ -48,6 +48,11 @@ export type SuccessMessage = {
   success: boolean;
 };
 
+export type NavLinkType = {
+  isActive: boolean;
+  extraClasses?: string;
+};
+
 export type TransactionType = {
   account_id: string;
   account_number: string;
@@ -65,27 +70,14 @@ export type TransactionType = {
   user_id: string;
 };
 
+export type SingleAccountFetchProp = {
+  account_id: string;
+  user_id: string;
+};
 export type TransactionResponse = {
   transactions: TransactionType[];
   message: string;
 };
-
-// export type TransactionResponse = SuccessMessage & {
-//   transactions: TransactionType[];
-//   completed_transactions: number;
-//   total_transactions: number;
-//   data: {
-//     accounts: {
-//       id: string;
-//       user_id: string;
-//       account_number: string;
-//       balance: number;
-//       is_default: boolean;
-//       created_at: string;
-//       updated_at: string;
-//     };
-//   };
-// };
 
 export type TransactionProps = TransactionResponse & {
   message: string;
@@ -109,6 +101,46 @@ export type TransactionDataType = SuccessMessage & {
   };
 };
 
+export type CustomerDataType = SuccessMessage & {
+  customers: {
+    customers: CurrentUserType[];
+    totalCount: number;
+  };
+};
+
+export type TransactionAdminProp = TransactionType & CurrentUserType;
+
+export type AdminState = {
+  allCustomers: CurrentUserType[];
+  allTransactions: TransactionType[];
+  allAccounts: Account[];
+  allTransactionsTotalCount: number;
+  allAccountsTotalCount: number;
+  allCustomersTotalCount: number;
+  singleCustomerDetails: {
+    user: CurrentUserType;
+    accounts: Account[];
+  };
+  singleTransactionDetails: TransactionAdminProp;
+  singleAccountDetails: Account & CurrentUserType;
+};
+
+export type SuperAdminState = {
+  allAdmins: CurrentUserType[];
+  allAdminsTotalCount: number;
+  singleAdminDetails: {
+    user: CurrentUserType;
+    accounts: Account[];
+  };
+};
+
+export type AccountDataType = SuccessMessage & {
+  accounts: {
+    accounts: Account[];
+    totalCount: number;
+  };
+};
+
 export type ReceiverInfo = {
   account_number: string;
   account_name: string;
@@ -125,7 +157,6 @@ export type DataToSend = {
 };
 
 export type CreditOptionsType = {
-  // accountTransactions: AccountInfoType;
   accountInfo: {
     accounts: {
       id: string;
@@ -179,43 +210,39 @@ export type BankProps = {
   created_at: string;
   updated_at: string;
 };
-// export type AccountInfoType = {
-//   singleAccountTransactionDetails: TransactionType[];
-//   singleAccountCompletedTransactionsCount: number;
-//   singleAccountTotalTransactionsCount: number;
-//   accountInfo: Account;
-// };
+
+export type CurrentUserType = {
+  id: string;
+  status: string;
+  user_name: string;
+  email: string;
+  first_name: string;
+  last_name: string;
+  phone_number: string;
+  two_fa_enabled: boolean;
+  biometric_enabled: boolean;
+  is_verified: boolean;
+  is_updated: boolean;
+  created_at: string;
+  updated_at: string;
+  is_phone_verified: boolean;
+  account_tier: string;
+  role: string;
+  profile_image: {
+    url: string;
+    public_id: string;
+  };
+};
 
 export type UserState = {
-  currentUser: {
-    id: string;
-    status: string;
-    user_name: string;
-    email: string;
-    first_name: string;
-    last_name: string;
-    phone_number: string;
-    two_fa_enabled: boolean;
-    biometric_enabled: boolean;
-    is_verified: boolean;
-    is_updated: boolean;
-    created_at: string;
-    updated_at: string;
-    is_phone_verified: boolean;
-    account_tier: string;
-    profile_image: {
-      url: string;
-      public_id: string;
-    };
-  };
-
+  currentUser: CurrentUserType;
   access: string;
   loading: boolean;
   error: null;
 };
 
 export type NotificationProp = {
-  id: string;
+  id: number;
   is_read: boolean;
   created_at: string;
   updated_at: string;
@@ -227,6 +254,8 @@ export type NotificationProp = {
 
 export type NotificationState = {
   userNotifications: NotificationProp[];
+  totalIsViewed: number;
+  totalNotificationsCount: number;
 };
 
 export type AccountState = {
@@ -257,6 +286,7 @@ export type TransferDataType = {
   amount: string;
   selected_account_number: string;
   description: string;
+  receiver_account_name: string;
 };
 
 export type dataObj = {
@@ -269,6 +299,21 @@ export type dataObj = {
 export type SidebarProp = {
   transactionClick: boolean;
   setTransactionClick?: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+export type SidebarComponentProps = {
+  toggle: boolean | undefined;
+  handleDropDownToggle?: () => void;
+  dropDownOpen?: boolean | undefined;
+  handleTheDropDownToggle?: () => void;
+  dropOpen?: boolean | undefined;
+  handleGeneralMenuToggle?: () => void;
+  generalMenuOpen?: boolean | undefined;
+  handleAdminMenuToggle?: () => void;
+  adminMenuOpen?: boolean | undefined;
+  handleSuperAdminMenuToggle?: () => void;
+  handleCloseToggle?: () => void;
+  superAdminMenuOpen?: boolean | undefined;
 };
 
 export type SearchProp = {
@@ -300,7 +345,6 @@ export type TransactionState = {
     receiving_bank_name: string;
     receiver_account_name: string;
   };
-  // singleAccountTransactionDetails: TransactionResponse[];
 
   singleAccountCompletedTransactionsCount: number;
   singleAccountTotalTransactionsCount: number;

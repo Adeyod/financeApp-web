@@ -1,38 +1,55 @@
 import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { IoMdMenu, IoMdClose } from 'react-icons/io';
 import { IoNotifications } from 'react-icons/io5';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { checkTokenExpiration } from '../hooks/authChecker';
 import axios from 'axios';
-import { logoutRoute } from '../hooks/ApiRoutes';
-import { loginFailure, loginStart, logoutSuccess } from '../redux/userSlice';
+import { loginFailure } from '../redux/userSlice';
 import { toast } from 'react-toastify';
-import { clearAccounts } from '../redux/accountSlice';
-import { clearTransactions } from '../redux/transactionSlice';
-import { UserState } from '../constants/types';
+
+import { NotificationState, UserState } from '../constants/types';
 import { getNotifications } from '../hooks/ApiCalls';
 import { getNotificationsSuccess } from '../redux/notificationSlice';
+import GeneralSidebar from './SidebarComponents/GeneralSidebar';
+import AdminSidebar from './SidebarComponents/AdminSidebar';
+import SuperAdminSidebar from './SidebarComponents/SuperAdminSidebar';
+import LogoutComponent from './LogoutComponent';
 
 const NavBar = () => {
   const [toggle, setToggle] = useState(false);
+  const [toggleDropDown] = useState(false);
+  const [generalMenuOpen, setGeneralMenuOpen] = useState(false);
+  const [adminMenuOpen, setAdminMenuOpen] = useState(false);
+  const [superAdminMenuOpen, setSuperAdminMenuOpen] = useState(false);
   const [fixed, setFixed] = useState(false);
 
+  const handleGeneralMenuToggle = () => {
+    setGeneralMenuOpen(!generalMenuOpen);
+  };
+
+  const handleAdminMenuToggle = () => {
+    setAdminMenuOpen(!adminMenuOpen);
+  };
+  const handleSuperAdminMenuToggle = () => {
+    setSuperAdminMenuOpen(!superAdminMenuOpen);
+  };
+
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const { currentUser, access } = useSelector(
     (state: { user: UserState }) => state.user
   );
 
-  // const { userNotifications } = useSelector(
-  //   (state: { notifications: NotificationState }) => state.notifications
-  // );
+  const handleLogout = LogoutComponent();
+  const { totalIsViewed } = useSelector(
+    (state: { notifications: NotificationState }) => state.notifications
+  );
 
-  // const newNotifications = userNotifications.filter(
-  //   (notification: NotificationProp) => notification.is_read === false
-  // ).length;
+  const [searchValue] = useState('');
+  const [page] = useState(1);
+  const limit = '10';
 
   const handleFixed = () => {
     if (window.scrollY > 10) {
@@ -42,33 +59,13 @@ const NavBar = () => {
     }
   };
 
-  const handleLogout = async () => {
-    dispatch(loginStart());
+  const getAllNotifications = async (searchValue: string) => {
     try {
-      const { data } = await axios.get(logoutRoute);
-      if (data) {
-        dispatch(logoutSuccess());
-        dispatch(clearAccounts());
-        dispatch(clearTransactions());
-        toast.success(data.message);
-        navigate('/login');
-      }
-    } catch (error: unknown) {
-      if (axios.isAxiosError(error) && error.response) {
-        console.error(error.response.data.message);
-        toast.error(error.response.data.message);
-        dispatch(loginFailure(error));
-      } else {
-        console.error('An error occurred:', error);
-        toast.error('An error occurred:');
-      }
-    }
-  };
-
-  const getAllNotifications = async () => {
-    try {
-      const response = await getNotifications();
-      console.log(response);
+      const response = await getNotifications(
+        page.toString(),
+        limit,
+        searchValue
+      );
       dispatch(getNotificationsSuccess(response?.notifications));
       return;
     } catch (error: unknown) {
@@ -84,7 +81,7 @@ const NavBar = () => {
   };
 
   useEffect(() => {
-    getAllNotifications();
+    getAllNotifications(searchValue);
   }, []);
 
   useEffect(() => {
@@ -102,6 +99,10 @@ const NavBar = () => {
 
   const handleToggle = () => {
     setToggle(!toggle);
+  };
+
+  const handleCloseToggle = () => {
+    setToggle(false);
   };
   return (
     <div className="">
@@ -126,7 +127,7 @@ const NavBar = () => {
               <div className="gap-3 items-center flex">
                 <div className="relative">
                   <p className="absolute rounded-full px-2 bg-red-600 font-bold text-xl top-[-15px]">
-                    {/* {newNotifications} */}9
+                    {totalIsViewed > 0 && totalIsViewed}
                   </p>
                   <Link to="/notifications">
                     <IoNotifications className="text-3xl" />
@@ -167,45 +168,50 @@ const NavBar = () => {
                 toggle
                   ? 'fade-enter fade-enter-active'
                   : 'hidden fade-exit fade-exit-active',
-                'bg-primary z-[9999] absolute md:hidden h-screen top-[70px] w-[30vw] pl-10  pb-10 items-start right-0 text-xl',
+                'bg-secondary text-black overflow-y-visible z-[9999] absolute md:hidden h-screen top-[70px] w-[30vw] pl-10  pb-10 items-start right-0 text-xl',
               ].join(' ')}
             >
               {currentUser && currentUser !== null ? (
-                <div className="flex flex-col items-center gap-4 mt-6">
-                  <Link to="/profile" className="">
-                    Profile
-                  </Link>
+                <div className=" ml-[-50px] text-[12px] flex flex-col items-start gap-1 mt-6">
+                  <GeneralSidebar
+                    handleGeneralMenuToggle={handleGeneralMenuToggle}
+                    generalMenuOpen={generalMenuOpen}
+                    toggle={toggleDropDown}
+                    handleCloseToggle={handleCloseToggle}
+                  />
 
-                  <Link to="/notifications">Notifications</Link>
+                  {(currentUser?.role === 'admin' ||
+                    currentUser?.role === 'super_admin') && (
+                    <AdminSidebar
+                      toggle={toggleDropDown}
+                      handleAdminMenuToggle={handleAdminMenuToggle}
+                      adminMenuOpen={adminMenuOpen}
+                      handleCloseToggle={handleCloseToggle}
+                    />
+                  )}
 
-                  <Link to="/change-password" className="">
-                    Change Password
-                  </Link>
+                  {currentUser?.role === 'super_admin' && (
+                    <SuperAdminSidebar
+                      toggle={toggleDropDown}
+                      handleSuperAdminMenuToggle={handleSuperAdminMenuToggle}
+                      superAdminMenuOpen={superAdminMenuOpen}
+                      handleCloseToggle={handleCloseToggle}
+                    />
+                  )}
 
-                  <Link to="/transactions" className="">
-                    Transactions
-                  </Link>
-
-                  <Link to="/accounts" className="">
-                    My Accounts
-                  </Link>
-
-                  <Link to="/credit" className="">
-                    Credit Account
-                  </Link>
-
-                  <Link to="/transfer" className="">
-                    Transfer funds
-                  </Link>
-
-                  <button onClick={handleLogout}>Logout</button>
+                  <button
+                    className="text-red-600 mb-32 ml-7 mt-5 text-[12px] smm:text-[15px] mng:text-[18px]"
+                    onClick={handleLogout}
+                  >
+                    Logout
+                  </button>
                 </div>
               ) : (
                 <div className="flex flex-col items-center gap-4 mt-6">
-                  <Link to="/login" className="">
+                  <Link onClick={handleCloseToggle} to="/login" className="">
                     Login
                   </Link>
-                  <Link to="/register" className="">
+                  <Link onClick={handleCloseToggle} to="/register" className="">
                     Register
                   </Link>
                 </div>

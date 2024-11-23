@@ -2,24 +2,26 @@ import { useEffect, useState } from 'react';
 import Spinner from '../components/Spinner';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { callbackResult } from '../hooks/ApiCalls';
+import { callbackResult, getNotifications } from '../hooks/ApiCalls';
 import { FaRegHandPointRight } from 'react-icons/fa';
 import { GoVerified } from 'react-icons/go';
 import { BiErrorAlt } from 'react-icons/bi';
 import axios from 'axios';
+import { getNotificationsSuccess } from '../redux/notificationSlice';
+import { useDispatch } from 'react-redux';
 
 const PaystackCallback = () => {
-  // const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const [loading, setLoading] = useState(true);
   const [success, setSuccess] = useState(false);
-  // const [failure, setFailure] = useState(false);
 
   const searchParams = new URLSearchParams(location.search);
   const reference = searchParams.get('reference');
 
-  // const reference = localStorage.getItem('transactionRef');
-
-  // console.log('REFERENCE', reference);
+  const [searchValue] = useState('');
+  const [page] = useState(1);
+  const limit = '10';
 
   const handleCallback = async () => {
     try {
@@ -30,6 +32,13 @@ const PaystackCallback = () => {
 
       if (data) {
         toast.success(data.message);
+
+        const result = await getNotifications(
+          page.toString(),
+          limit,
+          searchValue
+        );
+        dispatch(getNotificationsSuccess(result?.notifications));
 
         setSuccess(true);
         return;
@@ -51,20 +60,6 @@ const PaystackCallback = () => {
     handleCallback();
   }, []);
 
-  // useEffect(() => {
-  //   navigateUser();
-  // }, [loading, success, failure, navigate]);
-
-  // const navigateUser = () => {
-  //   const timer = setTimeout(() => {
-  //     if (!loading && success) {
-  //       navigate('/accounts');
-  //     } else if (!loading && failure) {
-  //       navigate('/credit');
-  //     }
-  //   }, 5000);
-  // };
-
   return (
     <div>
       {loading ? (
@@ -75,19 +70,6 @@ const PaystackCallback = () => {
             Account credited successfully.
           </p>
           <GoVerified className="text-8xl my-4 text-green-600" />
-          {/* <div className="flex items-center gap-3 justify-center">
-            <p className="text-xl md:text-2xl lg:text-4xl italic">
-              If you are not redirected in 5sec, click this
-            </p>
-            <FaRegHandPointRight className="text-3xl animate-ping" />
-
-            <Link
-              to="/accounts"
-              className="uppercase bg-primary text-2xl font-bold text-white p-2 rounded-lg italic"
-            >
-              My Accounts
-            </Link>
-          </div> */}
         </div>
       ) : (
         <div className="flex flex-col items-center justify-center min-h-screen">

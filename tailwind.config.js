@@ -9,8 +9,11 @@ export default {
         slg: '1212px',
         nlg: '1205px',
         mlg: '1000px',
+        cng: '1130px',
+        cpg: '1070px',
         clg: '1025px',
         mmg: '900px',
+        lmg: '650px',
         smm: '590px',
         mng: '641px',
         smn: '500px',
@@ -18,6 +21,7 @@ export default {
       colors: {
         primary: '#9b59b6',
         secondary: '#5063BF',
+        tertiary: '#1E1E1E',
       },
       animation: {
         blink: 'blink 2s steps(2, start) infinite',

@@ -42,7 +42,6 @@ const AccountDetailsPage = () => {
     (account) => account.id === account_id
   );
 
-  // const [searchParams, setSearchParams] = useSearchParams();
   const queryParams = new URLSearchParams(location.search);
   const pageParam = queryParams.get('page');
   const limitParam = queryParams.get('limit');
@@ -51,8 +50,6 @@ const AccountDetailsPage = () => {
   const [searchValue, setSearchValue] = useState(searchParam || '');
   const [page, setPage] = useState(Number(pageParam) || 1);
   const limit = limitParam || '10';
-
-  console.log(searchValue);
 
   const totalPages = Math.ceil(
     singleAccountTotalTransactionsCount / Number(limit)
@@ -130,6 +127,7 @@ const AccountDetailsPage = () => {
               setSearchValue={setSearchValue}
             />
           </div>
+
           <div className="max-w-[80vw] mx-2 md:ml-10 lg:ml-0 content-center">
             <CreditOptions
               singleAccountCompletedTransactionsCount={

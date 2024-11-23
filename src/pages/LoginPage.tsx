@@ -48,8 +48,8 @@ const LoginPage = () => {
   const { loading } = useSelector((state: { user: UserState }) => state.user);
 
   const [formData, setFormData] = useState<LoginFormData>({
-    login_input: 'adeyod',
-    password: '$Adebolu@6910',
+    login_input: '',
+    password: '',
   });
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {

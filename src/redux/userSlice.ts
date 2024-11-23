@@ -41,15 +41,13 @@ const userSlice = createSlice({
       state.error = action.payload;
     },
 
-    logoutSuccess(state) {
+    clearUser(state) {
       state.loading = false;
       state.currentUser = null;
       state.access = null;
 
       localStorage.removeItem('currentUser');
       localStorage.removeItem('access');
-      localStorage.removeItem('accountDetails');
-      localStorage.removeItem('transactionDetails');
       state.error = null;
     },
 
@@ -63,24 +61,12 @@ const userSlice = createSlice({
     loadingStop(state) {
       state.loading = false;
     },
-
-    removeUser(state) {
-      state.loading = false;
-      state.currentUser = null;
-
-      localStorage.removeItem('currentUser');
-      localStorage.removeItem('access');
-      localStorage.removeItem('accountDetails');
-      localStorage.removeItem('transactionDetails');
-      state.error = null;
-    },
   },
 });
 
 export const {
+  clearUser,
   updateUser,
-  removeUser,
-  logoutSuccess,
   loginStart,
   loginSuccess,
   loginFailure,

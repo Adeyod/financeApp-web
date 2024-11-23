@@ -1,6 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  SidebarProp,
   TransactionState,
   TransactionType,
   UserState,
@@ -21,8 +20,7 @@ import axios from 'axios';
 import Search from '../components/Search';
 import useDebounce from '../hooks/UseDebounce';
 
-const TransactionsPage = ({ transactionClick }: SidebarProp) => {
-  console.log(transactionClick);
+const TransactionsPage = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const [loading, setLoading] = useState(false);
@@ -60,7 +58,7 @@ const TransactionsPage = ({ transactionClick }: SidebarProp) => {
         dispatch(getTransactionsSuccess(response?.transactions));
         setLocalTransactionDetails(response?.transactions?.transactions || []);
       }
-    } catch (error) {
+    } catch (error: unknown) {
       if (axios.isAxiosError(error) && error.response) {
         toast.error(error.response.data.message);
       } else {
@@ -98,7 +96,7 @@ const TransactionsPage = ({ transactionClick }: SidebarProp) => {
     );
 
     getAllTransactions(searchValue);
-  }, [page, location.pathname, limit, searchValue, transactionClick]);
+  }, [page, location.pathname, limit, searchValue]);
 
   return (
     <div>

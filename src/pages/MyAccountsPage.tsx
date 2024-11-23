@@ -96,8 +96,19 @@ const MyAccountsPage = () => {
               'border p-2 mt-4 rounded-lg text-white uppercase font-bold italic',
             ].join(' ')}
           >
-            {loading ? 'LOADING...' : 'create account'}
+            {loading
+              ? 'LOADING...'
+              : accountDetails?.accounts?.length === 5
+              ? 'Max Account'
+              : 'Create Account'}
           </button>
+
+          {accountDetails?.accounts?.length === 5 && (
+            <p className="text-red-600 italic">
+              You have opened the maximum number of accounts allowed for an
+              individual
+            </p>
+          )}
         </div>
       </div>
 

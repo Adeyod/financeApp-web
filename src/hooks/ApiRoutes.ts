@@ -12,6 +12,16 @@ const ResentEmailVerificationRoute = `${host}/auth/resend-email-verification`;
 const accountsRoute = `${host}/accounts/user-accounts`;
 const singleAccountUsingAccountNumberRoute = `${host}/accounts/get-user-account`;
 const transactionsRoute = `${host}/transactions/user-transactions`;
+const allAccountsRoute = `${host}/accounts/all`;
+const getSingleAccountOfAUserForAdminRoute = `${host}/accounts/admin/account/`;
+const getSingleCustomerForAdminRoute = `${host}/users/admin/single-customer/`;
+const getSingleAdminForSuperAdminRoute = `${host}/users/super-admin/single-admin/`;
+const allTransactionsRoute = `${host}/transactions/all`;
+const getSingleTransactionOfAUserForAdminRoute = `${host}/transactions/admin/transaction/`;
+const allCustomersRoute = `${host}/users/all-customers`;
+const allAdminsRoute = `${host}/users/all-admins`;
+const removeAdminRoute = `${host}/users/super-admin/remove-admin/`;
+
 const paystackTransactionResponseRoute = `${host}/transactions/status-paystack`;
 
 const singleTransactionByTransactionId = `${host}/transactions/single-transaction`;
@@ -23,14 +33,24 @@ const createAccountRoute = `${host}/accounts/user-account/create`;
 const getUserAccountNameRoute = `${host}/accounts/confirm-receiver-account`;
 const getReceivingFundFlowAccountNameRoute = `${host}/accounts/get-receiving-user-details`;
 const getUserSingleAccountTransactionsRoute = `${host}/transactions/single-account-transactions/`;
-// const getTransactionById = `${host}/transactions/`;
 const callbackRoute = `${host}/transactions/call-back`;
 const allNotificationsRoute = `${host}/notifications/user-notifications`;
+const markNotificationAsViewedRoute = `${host}/notifications/user-notifications/view`;
+const markNotificationAsReadRoute = `${host}/notifications/user-notifications/read/`;
 const singleNotificationRoute = `${host}/notifications/user-notifications`;
 const deleteNotificationRoute = `${host}/notifications/user-notifications`;
-// const getUserAccounts;
+const deleteManyNotificationRoute = `${host}/notifications/user-notifications/delete-many`;
 
 export {
+  removeAdminRoute,
+  deleteManyNotificationRoute,
+  getSingleAdminForSuperAdminRoute,
+  allAdminsRoute,
+  getSingleTransactionOfAUserForAdminRoute,
+  getSingleCustomerForAdminRoute,
+  getSingleAccountOfAUserForAdminRoute,
+  markNotificationAsReadRoute,
+  markNotificationAsViewedRoute,
   allNotificationsRoute,
   singleNotificationRoute,
   deleteNotificationRoute,
@@ -57,6 +77,7 @@ export {
   ResentEmailVerificationRoute,
   ImageUploadRoute,
   paystackTransactionResponseRoute,
+  allAccountsRoute,
+  allTransactionsRoute,
+  allCustomersRoute,
 };
-
-// Needed to add userId and token to this two routes

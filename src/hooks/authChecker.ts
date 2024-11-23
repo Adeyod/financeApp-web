@@ -1,5 +1,10 @@
 import { jwtDecode, JwtPayload } from 'jwt-decode';
-import { removeUser } from '../redux/userSlice';
+import { clearUser } from '../redux/userSlice';
+import { clearAccounts } from '../redux/accountSlice';
+import { clearTransactions } from '../redux/transactionSlice';
+import { clearNotifications } from '../redux/notificationSlice';
+import { clearAdmin } from '../redux/adminSlice';
+import { clearSuperAdmin } from '../redux/superAdminSlice';
 
 export const checkTokenExpiration = (access: string, dispatch: any) => {
   const decoded: JwtPayload = jwtDecode<JwtPayload>(access);
@@ -9,7 +14,12 @@ export const checkTokenExpiration = (access: string, dispatch: any) => {
     const currentTime = Date.now();
 
     if (expirationTime < currentTime) {
-      dispatch(removeUser());
+      dispatch(clearUser());
+      dispatch(clearAccounts());
+      dispatch(clearTransactions());
+      dispatch(clearNotifications());
+      dispatch(clearAdmin());
+      dispatch(clearSuperAdmin());
     }
   }
 };

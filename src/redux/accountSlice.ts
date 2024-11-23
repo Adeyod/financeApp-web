@@ -57,6 +57,9 @@ const accountSlice = createSlice({
     clearAccounts(state) {
       state.accountDetails = null;
       state.singleAccountDetails = null;
+
+      localStorage.removeItem('accountDetails');
+      localStorage.removeItem('singleAccountDetails');
     },
   },
 });

@@ -9,6 +9,7 @@ import {
 import { toast } from 'react-toastify';
 import {
   getFundFlowReceivingAccountName,
+  getNotifications,
   makeTransferToFundFlowAccount,
 } from '../../hooks/ApiCalls';
 import { useNavigate } from 'react-router-dom';
@@ -16,9 +17,12 @@ import axios from 'axios';
 import { FundFlowProp, ReceiverProp } from '../../constants/types';
 import { joiReceivingAccountSchema } from '../../hooks/validation';
 import SmallSpinner from '../SmallSpinner';
+import { getNotificationsSuccess } from '../../redux/notificationSlice';
+import { useDispatch } from 'react-redux';
 
 const FundFlow = ({ selectedAccountNumber }: FundFlowProp) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [amount, setAmount] = useState('');
   const [loading, setLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -29,6 +33,12 @@ const FundFlow = ({ selectedAccountNumber }: FundFlowProp) => {
     first_name: '',
     last_name: '',
   });
+
+  const [searchValue] = useState('');
+  const [page] = useState(1);
+  const limit = '10';
+
+  console.log(receiverDetails);
 
   const handleChange = (text: string) => {
     setAmount(text);
@@ -67,17 +77,21 @@ const FundFlow = ({ selectedAccountNumber }: FundFlowProp) => {
         receiving_account_number: receivingAccount.trim(),
         amount: amount.trim(),
         description: description.trim(),
+        receiver_account_name: `${receiverDetails?.first_name} ${receiverDetails?.last_name}`,
       };
 
       const response = await makeTransferToFundFlowAccount(data);
 
-      console.log(response);
-
       if (response.status === 200 && response?.data?.success === true) {
         toast.success(response?.data?.message);
+        const result = await getNotifications(
+          page.toString(),
+          limit,
+          searchValue
+        );
+        dispatch(getNotificationsSuccess(result?.notifications));
         navigate(`/accounts`);
         return;
-        // }
       }
     } catch (error: unknown) {
       if (axios.isAxiosError(error) && error.response) {
@@ -104,7 +118,6 @@ const FundFlow = ({ selectedAccountNumber }: FundFlowProp) => {
       if (error) {
         console.log(error);
         error.details.forEach((detail) => {
-          console.log(detail.message);
           toast.error(detail.message);
         });
         return;
@@ -147,10 +160,6 @@ const FundFlow = ({ selectedAccountNumber }: FundFlowProp) => {
       getReceiverAccountName();
     }
   }, [receivingAccount]);
-
-  console.log('RECEIVING ACCOUNT:', receivingAccount);
-  console.log('AMOUNT:', amount);
-  console.log('SELECTED ACCOUNT:', selectedAccountNumber);
 
   return (
     <div className="min-w-[30vw] flex flex-col items-center">

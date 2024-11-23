@@ -26,4 +26,11 @@ const formattedNumber = (prop: number) => {
   return result;
 };
 
-export { capitalizeFirstLetter, formatDate, formattedNumber };
+const truncateText = (text: string, maxLength: number) => {
+  if (text.length > maxLength) {
+    return text.substring(0, maxLength - 3) + '...';
+  }
+  return text;
+};
+
+export { truncateText, capitalizeFirstLetter, formatDate, formattedNumber };
