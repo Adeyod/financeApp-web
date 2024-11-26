@@ -1,4 +1,5 @@
-const host = 'http://localhost:3020/api';
+// const host = 'http://localhost:3020/api';
+const host = 'https://financeapp-backend-atuh.onrender.com/api';
 
 const RegisterRoute = `${host}/auth/register`;
 const logoutRoute = `${host}/auth/logout`;

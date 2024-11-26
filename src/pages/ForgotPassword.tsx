@@ -21,7 +21,7 @@ import { UserState } from '../constants/types';
 const ForgotPassword = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [email, setEmail] = useState('ayodejiadebolu@gmail.com');
+  const [email, setEmail] = useState('');
 
   const { loading } = useSelector((state: { user: UserState }) => state.user);
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
