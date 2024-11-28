@@ -80,7 +80,12 @@ const NavBar = () => {
     }
   };
 
+  console.log('API Base URL:', process.env.REACT_APP_API_URL);
+
   useEffect(() => {
+    console.log('API Base URL:', process.env.REACT_APP_API_URL);
+
+    console.log('NAVBAR CURRENT USER:', currentUser);
     if (currentUser && access) {
       getAllNotifications(searchValue);
     }
