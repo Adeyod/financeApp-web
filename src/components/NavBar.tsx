@@ -84,7 +84,7 @@ const NavBar = () => {
     if (currentUser && access) {
       getAllNotifications(searchValue);
     }
-  }, []);
+  }, [currentUser, searchValue]);
 
   useEffect(() => {
     window.addEventListener('scroll', handleFixed);
