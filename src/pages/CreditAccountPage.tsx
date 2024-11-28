@@ -137,7 +137,6 @@ const CreditAccountPage = () => {
 
         window.location.href = result.data?.data?.authorization_url;
 
-        // pollTransactionStatus(result.data?.data?.reference);
         return;
       }
     } catch (error: unknown) {

@@ -40,6 +40,7 @@ const PaystackCallback = () => {
         );
         dispatch(getNotificationsSuccess(result?.notifications));
 
+        localStorage.removeItem('transactionRef');
         setSuccess(true);
         return;
       }

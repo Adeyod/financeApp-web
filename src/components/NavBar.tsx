@@ -81,7 +81,9 @@ const NavBar = () => {
   };
 
   useEffect(() => {
-    getAllNotifications(searchValue);
+    if (currentUser && access) {
+      getAllNotifications(searchValue);
+    }
   }, []);
 
   useEffect(() => {
