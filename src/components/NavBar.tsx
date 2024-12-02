@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { IoMdMenu, IoMdClose } from 'react-icons/io';
 import { IoNotifications } from 'react-icons/io5';
@@ -24,6 +24,8 @@ const NavBar = () => {
   const [adminMenuOpen, setAdminMenuOpen] = useState(false);
   const [superAdminMenuOpen, setSuperAdminMenuOpen] = useState(false);
   const [fixed, setFixed] = useState(false);
+
+  const notificationIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleGeneralMenuToggle = () => {
     setGeneralMenuOpen(!generalMenuOpen);
@@ -83,6 +85,17 @@ const NavBar = () => {
   useEffect(() => {
     if (currentUser && access) {
       getAllNotifications(searchValue);
+
+      notificationIntervalRef.current = setInterval(() => {
+        console.log('i want to get all notifications again');
+        getAllNotifications(searchValue);
+      }, 60000);
+
+      return () => {
+        if (notificationIntervalRef.current) {
+          clearInterval(notificationIntervalRef.current);
+        }
+      };
     }
   }, [currentUser, searchValue]);
 

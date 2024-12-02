@@ -14,9 +14,11 @@ import axios from 'axios';
 import { capitalizeFirstLetter } from '../hooks/functions';
 import { Link } from 'react-router-dom';
 import { getNotificationsSuccess } from '../redux/notificationSlice';
+import SmallSpinner from '../components/SmallSpinner';
 
 const Profile = () => {
   const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [imgUrl, setImgUrl] = useState<string>();
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -29,6 +31,7 @@ const Profile = () => {
   const limit = '10';
 
   const uploadImage = async () => {
+    setIsLoading(true);
     try {
       console.log('i am trying to upload');
 
@@ -56,6 +59,8 @@ const Profile = () => {
       console.log(data);
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -152,11 +157,11 @@ const Profile = () => {
                     Change Image
                   </button>
                   <button
-                    className="bg-green-600 text-white text-[15px] px-3 italic uppercase rounded-full"
+                    className="bg-green-600 text-white text-[15px] w-[130px] px-3 italic uppercase rounded-full"
                     onClick={uploadImage}
                     disabled={!selectedFile}
                   >
-                    Upload Image
+                    {isLoading ? <SmallSpinner /> : 'Upload Image'}
                   </button>
                 </div>
 
