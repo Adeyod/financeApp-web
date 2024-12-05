@@ -66,12 +66,12 @@ const RegisterPage = () => {
   const [phoneValue, setPhoneValue] = useState('+2348100987235');
   const [loading, setLoading] = useState(false);
   let [formData, setFormData] = useState<FormData>({
-    first_name: 'Fola',
-    user_name: 'Folly',
-    last_name: 'Adebolu',
-    email: 'votinggivers@gmail.com',
-    password: '$Password@6910',
-    confirm_password: '$Password@6910',
+    first_name: '',
+    user_name: '',
+    last_name: '',
+    email: '',
+    password: '',
+    confirm_password: '',
   });
 
   formData = { ...formData, phone_number: phoneValue };
