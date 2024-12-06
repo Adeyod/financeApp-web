@@ -54,7 +54,13 @@ const LoginPage = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const { error } = joiLoginValidationSchema.validate(formData, {
+
+    const trimmedFormData = {
+      login_input: formData.login_input.trim(),
+      password: formData.password.trim(),
+    };
+
+    const { error } = joiLoginValidationSchema.validate(trimmedFormData, {
       abortEarly: false,
     });
 
@@ -68,7 +74,7 @@ const LoginPage = () => {
 
     dispatch(loginStart());
     try {
-      const { data } = await axios.post(LoginRoute, formData, {
+      const { data } = await axios.post(LoginRoute, trimmedFormData, {
         headers: {
           'x-fund-flow': 'web-fund-flow',
         },
