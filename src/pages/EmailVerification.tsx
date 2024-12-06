@@ -7,23 +7,16 @@ import Spinner from '../components/Spinner';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import { EmailVerificationRoute } from '../hooks/ApiRoutes';
-import { getNotifications } from '../hooks/ApiCalls';
-import { getNotificationsSuccess } from '../redux/notificationSlice';
-import { useDispatch } from 'react-redux';
 
 const EmailVerification = () => {
   const [isVerified, setIsVerified] = useState(false);
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
 
   const searchParams = new URLSearchParams(location.search);
   const userId = searchParams.get('userId');
   const token = searchParams.get('token');
-
-  const [searchValue] = useState('');
-  const [page] = useState(1);
-  const limit = '10';
 
   const handleVerification = async () => {
     try {
@@ -33,12 +26,7 @@ const EmailVerification = () => {
       console.log(data);
       if (data.success) {
         toast.success(data.message);
-        const result = await getNotifications(
-          page.toString(),
-          limit,
-          searchValue
-        );
-        dispatch(getNotificationsSuccess(result?.notifications));
+
         setIsVerified(true);
         return;
       } else {
