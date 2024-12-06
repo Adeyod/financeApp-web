@@ -146,7 +146,7 @@ const LoginPage = () => {
           buttonTextStyle={RegisterButtonTextStyle}
         />
         <div className="mg:flex gap-3">
-          <div className="flex gap-1 italic text-[14px] mt-2">
+          <div className="flex md:gap-1 italic text-[14px] mt-2">
             <p>Don't have an account?</p>
             <Link className="font-bold text-blue-500 underline" to="/register">
               Register

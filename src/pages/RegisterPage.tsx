@@ -117,7 +117,7 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="flex lg:justify-around md:gap-[100px] justify-center items-center md:px-10 lg:px-20 py-10">
+    <div className="flex lg:justify-around mb-20 md:gap-[100px] justify-center items-center md:px-10 lg:px-20 py-10">
       <motion.div
         animate={{ x: 0, opacity: 1 }}
         transition={{ type: 'spring', stiffness: 20, duration: 5 }}
@@ -163,7 +163,7 @@ const RegisterPage = () => {
           buttonContainerStyle={RegisterButtonContainerStyle}
           buttonTextStyle={RegisterButtonTextStyle}
         />
-        <div className="flex gap-3 italic mt-2">
+        <div className="flex gap-3 italic mt-2 mb-10">
           <p>Have an account?</p>
           <Link className="font-bold text-blue-500 underline" to="/login">
             Login

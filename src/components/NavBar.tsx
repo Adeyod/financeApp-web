@@ -222,7 +222,7 @@ const NavBar = () => {
                   </button>
                 </div>
               ) : (
-                <div className="flex flex-col items-center gap-4 mt-6">
+                <div className="flex flex-col items-center gap-4 mt-6 pr-10">
                   <Link onClick={handleCloseToggle} to="/login" className="">
                     Login
                   </Link>
