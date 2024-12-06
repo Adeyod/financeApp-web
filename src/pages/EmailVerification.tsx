@@ -15,6 +15,7 @@ const EmailVerification = () => {
   const [isVerified, setIsVerified] = useState(false);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const searchParams = new URLSearchParams(location.search);
   const userId = searchParams.get('userId');
@@ -29,6 +30,7 @@ const EmailVerification = () => {
       const { data } = await axios.get(
         `${EmailVerificationRoute}?userId=${userId}&token=${token}`
       );
+      console.log(data);
       if (data.success) {
         toast.success(data.message);
         const result = await getNotifications(
@@ -39,14 +41,20 @@ const EmailVerification = () => {
         dispatch(getNotificationsSuccess(result?.notifications));
         setIsVerified(true);
         return;
+      } else {
+        setErrorMessage('Email verification failed. Please try again.');
+        setIsVerified(false);
+        return;
       }
     } catch (error: unknown) {
       if (axios.isAxiosError(error) && error.response) {
         console.error(error.response.data.message);
         toast.error(error.response.data.message);
+        setErrorMessage(error.response.data.message || 'An error occurred');
       } else {
         console.error('An error occurred:', error);
         toast.error('An error occurred:');
+        setErrorMessage('An error occurred');
       }
     } finally {
       setLoading(false);
@@ -84,7 +92,7 @@ const EmailVerification = () => {
       ) : (
         <div className="flex flex-col items-center justify-center min-h-screen">
           <p className="text-xl md:text-2xl lg:text-4xl italic">
-            Email verification failed
+            {errorMessage || 'Email verification failed'}
           </p>
           <BiErrorAlt className="text-8xl my-4 text-red-600" />
           <div className="flex items-center gap-3 justify-center">
