@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Spinner from '../components/Spinner';
-import { loginSuccess, updateUser } from '../redux/userSlice';
+import { updateUser } from '../redux/userSlice';
 import { AccountState, UserState } from '../constants/types';
 import { toast } from 'react-toastify';
 
