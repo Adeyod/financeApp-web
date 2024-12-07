@@ -3,10 +3,7 @@ import CreditOptions from '../components/CreditOptions';
 import { AccountState, TransactionState } from '../constants/types';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import {
-  getUserSingleAccountDetailsByAccountNumber,
-  getUserSingleAccountTransactionsWithoutQuery,
-} from '../hooks/ApiCalls';
+import useApi from '../hooks/ApiCalls';
 import { getSingleAccountSuccess } from '../redux/accountSlice';
 import { getSingleAccountTransactionsSuccess } from '../redux/transactionSlice';
 import OtherBanks from '../components/Transfers/OtherBanks';
@@ -17,6 +14,12 @@ import SmallSpinner from '../components/SmallSpinner';
 const TransferPage = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
+
+  const {
+    getUserSingleAccountDetailsByAccountNumber,
+    getUserSingleAccountTransactionsWithoutQuery,
+  } = useApi();
+
   const [selectedAccountNumber, setSelectedAccountNumber] =
     useState<string>('');
   const [fundFlow, setFundFlow] = useState(false);

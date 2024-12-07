@@ -3,17 +3,20 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 import { SuperAdminState } from '../../../constants/types';
 import { getSingleAdminSuccess } from '../../../redux/superAdminSlice';
-import { getSingleAdminForSuperAdmin } from '../../../hooks/ApiCalls';
+
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import Spinner from '../../../components/Spinner';
 import { formattedNumber } from '../../../hooks/functions';
+import useApi from '../../../hooks/ApiCalls';
 
 const SingleAdminDetails = () => {
   const [loading, setLoading] = useState(true);
 
   const { adminId } = useParams();
   const dispatch = useDispatch();
+
+  const { getSingleAdminForSuperAdmin } = useApi();
 
   const { singleAdminDetails } = useSelector(
     (state: { super_admin: SuperAdminState }) => state.super_admin

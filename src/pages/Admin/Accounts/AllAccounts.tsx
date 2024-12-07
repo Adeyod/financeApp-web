@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import Spinner from '../../../components/Spinner';
-import { getPlatformAccounts } from '../../../hooks/ApiCalls';
+import useApi from '../../../hooks/ApiCalls';
 import { getAllAccountsSuccess } from '../../../redux/adminSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
@@ -14,6 +14,7 @@ import Search from '../../../components/Search';
 const AllAccounts = () => {
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
+  const { getPlatformAccounts } = useApi();
 
   const { allAccounts, allAccountsTotalCount } = useSelector(
     (state: { admin: AdminState }) => state.admin

@@ -237,6 +237,7 @@ export type CurrentUserType = {
 export type UserState = {
   currentUser: CurrentUserType;
   access: string;
+  web: string;
   loading: boolean;
   error: null;
 };

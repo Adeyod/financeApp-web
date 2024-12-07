@@ -1,11 +1,5 @@
 import { useEffect, useState } from 'react';
 import Spinner from '../components/Spinner';
-import {
-  deleteManyNotifications,
-  deleteNotification,
-  getNotifications,
-  markNotificationsAsViewed,
-} from '../hooks/ApiCalls';
 import { useDispatch, useSelector } from 'react-redux';
 import { NotificationState } from '../constants/types';
 import { getNotificationsSuccess } from '../redux/notificationSlice';
@@ -25,6 +19,7 @@ import {
   MdOutlineCheckBoxOutlineBlank,
 } from 'react-icons/md';
 import { RiCheckboxMultipleFill } from 'react-icons/ri';
+import useApi from '../hooks/ApiCalls';
 
 const NotificationsPage = () => {
   const [loading, setLoading] = useState(true);
@@ -34,6 +29,12 @@ const NotificationsPage = () => {
     []
   );
   const dispatch = useDispatch();
+  const {
+    deleteManyNotifications,
+    deleteNotification,
+    getNotifications,
+    markNotificationsAsViewed,
+  } = useApi();
 
   const { userNotifications, totalNotificationsCount } = useSelector(
     (state: { notifications: NotificationState }) => state.notifications

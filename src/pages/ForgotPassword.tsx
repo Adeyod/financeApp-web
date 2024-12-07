@@ -5,7 +5,6 @@ import { toast } from 'react-toastify';
 
 import ImageFile from '../components/ImageFile';
 import Form from '../components/Form';
-import { ForgotPasswordRoute } from '../hooks/ApiRoutes';
 import Button from '../components/Button';
 import {
   RegisterButtonContainerStyle,
@@ -17,11 +16,13 @@ import { loadingStop, loginStart } from '../redux/userSlice';
 import { useNavigate } from 'react-router-dom';
 import { joiForgotPasswordValidationSchema } from '../hooks/validation';
 import { UserState } from '../constants/types';
+import useApi from '../hooks/ApiCalls';
 
 const ForgotPassword = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
+  const { forgotPasswordProcess } = useApi();
 
   const { loading } = useSelector((state: { user: UserState }) => state.user);
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -42,8 +43,9 @@ const ForgotPassword = () => {
     }
 
     dispatch(loginStart());
+
     try {
-      const { data } = await axios.post(ForgotPasswordRoute, { email });
+      const { data } = await forgotPasswordProcess(email);
       console.log(data);
       if (data.success) {
         toast.success(data.message);

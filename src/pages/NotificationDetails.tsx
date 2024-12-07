@@ -4,14 +4,15 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { loginFailure } from '../redux/userSlice';
 import { toast } from 'react-toastify';
-import { markANotificationAsRead } from '../hooks/ApiCalls';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSingleNotificationSuccess } from '../redux/notificationSlice';
 import { NotificationState } from '../constants/types';
+import useApi from '../hooks/ApiCalls';
 
 const NotificationDetails = () => {
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
+  const { markANotificationAsRead } = useApi();
 
   const { notificationId } = useParams();
 

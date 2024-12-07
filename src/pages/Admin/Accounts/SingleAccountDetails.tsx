@@ -5,12 +5,13 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSingleAccountOfAUserSuccess } from '../../../redux/adminSlice';
-import { getSingleAccountOfAUserForAdmin } from '../../../hooks/ApiCalls';
+import useApi from '../../../hooks/ApiCalls';
 import { AdminState } from '../../../constants/types';
 import { formattedNumber } from '../../../hooks/functions';
 
 const SingleAccountDetails = () => {
   const dispatch = useDispatch();
+  const { getSingleAccountOfAUserForAdmin } = useApi();
 
   const { singleAccountDetails } = useSelector(
     (state: { admin: AdminState }) => state.admin

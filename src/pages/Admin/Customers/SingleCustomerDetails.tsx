@@ -5,15 +5,16 @@ import { useEffect, useState } from 'react';
 import Spinner from '../../../components/Spinner';
 import { toast } from 'react-toastify';
 import axios from 'axios';
-import { getSingleCustomerForAdmin } from '../../../hooks/ApiCalls';
 import { getSingleCustomerSuccess } from '../../../redux/adminSlice';
 import { formattedNumber } from '../../../hooks/functions';
+import useApi from '../../../hooks/ApiCalls';
 
 const SingleCustomerDetails = () => {
   const [loading, setLoading] = useState(true);
 
   const { customerId } = useParams();
   const dispatch = useDispatch();
+  const { getSingleCustomerForAdmin } = useApi();
 
   const { singleCustomerDetails } = useSelector(
     (state: { admin: AdminState }) => state.admin

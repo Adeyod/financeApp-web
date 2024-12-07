@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getPlatformCustomers } from '../../../hooks/ApiCalls';
 import { getAllCustomersSuccess } from '../../../redux/adminSlice';
 import axios from 'axios';
 import { toast } from 'react-toastify';
@@ -9,10 +8,13 @@ import Spinner from '../../../components/Spinner';
 import { AdminState } from '../../../constants/types';
 import useDebounce from '../../../hooks/UseDebounce';
 import Search from '../../../components/Search';
+import useApi from '../../../hooks/ApiCalls';
 
 const AllCustomers = () => {
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
+
+  const { getPlatformCustomers } = useApi();
 
   const { allCustomers, allCustomersTotalCount } = useSelector(
     (state: { admin: AdminState }) => state.admin

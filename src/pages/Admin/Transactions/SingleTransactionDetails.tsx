@@ -6,11 +6,12 @@ import { useParams } from 'react-router-dom';
 import { AdminState } from '../../../constants/types';
 import { useDispatch, useSelector } from 'react-redux';
 import { formatDate, formattedNumber } from '../../../hooks/functions';
-import { getSingleTransactionOfAUserForAdmin } from '../../../hooks/ApiCalls';
 import { getSingleTransactionOfAUserSuccess } from '../../../redux/adminSlice';
+import useApi from '../../../hooks/ApiCalls';
 
 const SingleTransactionDetails = () => {
   const dispatch = useDispatch();
+  const { getSingleTransactionOfAUserForAdmin } = useApi();
 
   const { singleTransactionDetails } = useSelector(
     (state: { admin: AdminState }) => state.admin

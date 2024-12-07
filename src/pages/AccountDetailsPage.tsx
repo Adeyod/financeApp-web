@@ -8,17 +8,18 @@ import {
 import { AccountState, TransactionState, UserState } from '../constants/types';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
-import { getUserSingleAccountTransactions } from '../hooks/ApiCalls';
 import { toast } from 'react-toastify';
 import { getSingleAccountTransactionsSuccess } from '../redux/transactionSlice';
 import CreditOptions from '../components/CreditOptions';
 import axios from 'axios';
 import Search from '../components/Search';
 import useDebounce from '../hooks/UseDebounce';
+import useApi from '../hooks/ApiCalls';
 
 const AccountDetailsPage = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
+  const { getUserSingleAccountTransactions } = useApi();
 
   const {
     singleAccountTransactionDetails,

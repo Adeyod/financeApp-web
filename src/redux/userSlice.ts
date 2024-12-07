@@ -14,6 +14,7 @@ const initialState = {
   currentUser: safelyParseJSON(localStorage.getItem('currentUser')),
 
   access: safelyParseJSON(localStorage.getItem('access')),
+  web: safelyParseJSON(localStorage.getItem('web')),
 
   loading: false,
   error: null,
@@ -29,11 +30,13 @@ const userSlice = createSlice({
 
     loginSuccess(state, action) {
       state.loading = false;
-      const { user, access } = action.payload;
+      const { user, access, token } = action.payload;
       state.currentUser = user;
       state.access = access;
+      state.web = token;
       localStorage.setItem('currentUser', JSON.stringify(state.currentUser));
       localStorage.setItem('access', JSON.stringify(state.access));
+      localStorage.setItem('web', JSON.stringify(state.web));
     },
 
     loginFailure(state, action) {
@@ -45,15 +48,19 @@ const userSlice = createSlice({
       state.loading = false;
       state.currentUser = null;
       state.access = null;
+      state.web = null;
 
       localStorage.removeItem('currentUser');
       localStorage.removeItem('access');
+      localStorage.removeItem('web');
       state.error = null;
     },
 
     updateUser(state, action) {
       state.loading = false;
-      state.currentUser = action.payload;
+
+      const { user } = action.payload;
+      state.currentUser = user;
       localStorage.setItem('currentUser', JSON.stringify(state.currentUser));
       state.error = null;
     },

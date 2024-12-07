@@ -2,11 +2,7 @@ import { useEffect, useState } from 'react';
 import Spinner from '../../components/Spinner';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import {
-  getPlatformAccounts,
-  getPlatformCustomers,
-  getPlatformTransactions,
-} from '../../hooks/ApiCalls';
+
 import { useDispatch, useSelector } from 'react-redux';
 import {
   getAllAccountsSuccess,
@@ -17,9 +13,12 @@ import { AdminState, UserState } from '../../constants/types';
 import ChartComponents from '../../components/charts/ChartComponents';
 import { formatDate, formattedNumber } from '../../hooks/functions';
 import { Link } from 'react-router-dom';
+import useApi from '../../hooks/ApiCalls';
 
 const AdminDashboard = () => {
   const dispatch = useDispatch();
+  const { getPlatformAccounts, getPlatformCustomers, getPlatformTransactions } =
+    useApi();
 
   const { currentUser } = useSelector(
     (state: { user: UserState }) => state.user
@@ -196,14 +195,14 @@ const AdminDashboard = () => {
                         <Spinner />
                       </td>
                     </tr>
-                  ) : allCustomers.length === 0 ? (
+                  ) : allCustomers?.length === 0 ? (
                     <tr>
                       <td colSpan={6} className="text-center py-6">
                         You have no transactions yet 😑
                       </td>
                     </tr>
                   ) : (
-                    allCustomers.slice(0, 5).map((customer, index) => (
+                    allCustomers?.slice(0, 5).map((customer, index) => (
                       <tr key={index}>
                         <td className="pl-2 md:pl-6 py-2 md:py-4 text-sm md:text-[13px] lg:text-base">
                           {customer?.first_name}
@@ -261,14 +260,14 @@ const AdminDashboard = () => {
                         <Spinner />
                       </td>
                     </tr>
-                  ) : allTransactions.length === 0 ? (
+                  ) : allTransactions?.length === 0 ? (
                     <tr>
                       <td colSpan={6} className="text-center py-6">
                         You have no transactions yet 😑
                       </td>
                     </tr>
                   ) : (
-                    allTransactions.slice(0, 3).map((transaction, index) => (
+                    allTransactions?.slice(0, 3).map((transaction, index) => (
                       <tr key={index}>
                         <td className="pl-2 md:pl-6 py-2 md:py-4 text-sm md:text-[13px] lg:text-base">
                           {transaction?.account_number}
@@ -327,14 +326,14 @@ const AdminDashboard = () => {
                         <Spinner />
                       </td>
                     </tr>
-                  ) : allAccounts.length === 0 ? (
+                  ) : allAccounts?.length === 0 ? (
                     <tr>
                       <td colSpan={6} className="text-center py-6">
                         You have no transactions yet 😑
                       </td>
                     </tr>
                   ) : (
-                    allAccounts.slice(0, 3).map((account, index) => (
+                    allAccounts?.slice(0, 3).map((account, index) => (
                       <tr key={index}>
                         <td className="pl-2 md:pl-6 py-2 md:py-4 text-sm md:text-[13px] lg:text-base">
                           {account?.account_number}

@@ -10,7 +10,7 @@ import { loginFailure } from '../redux/userSlice';
 import { toast } from 'react-toastify';
 
 import { NotificationState, UserState } from '../constants/types';
-import { getNotifications } from '../hooks/ApiCalls';
+import useApi from '../hooks/ApiCalls';
 import { getNotificationsSuccess } from '../redux/notificationSlice';
 import GeneralSidebar from './SidebarComponents/GeneralSidebar';
 import AdminSidebar from './SidebarComponents/AdminSidebar';
@@ -24,6 +24,7 @@ const NavBar = () => {
   const [adminMenuOpen, setAdminMenuOpen] = useState(false);
   const [superAdminMenuOpen, setSuperAdminMenuOpen] = useState(false);
   const [fixed, setFixed] = useState(false);
+  const { getNotifications } = useApi();
 
   const notificationIntervalRef = useRef<NodeJS.Timeout | null>(null);
 

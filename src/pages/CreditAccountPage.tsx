@@ -10,20 +10,23 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { AccountState, TransactionState, UserState } from '../constants/types';
 import { capitalizeFirstLetter } from '../hooks/functions';
-import {
-  creditUserAccount,
-  getNotifications,
-  getUserSingleAccountDetailsByAccountNumber,
-  getUserSingleAccountTransactionsWithoutQuery,
-} from '../hooks/ApiCalls';
+
 import { toast } from 'react-toastify';
 import { getSingleAccountTransactionsSuccess } from '../redux/transactionSlice';
 import { getSingleAccountSuccess } from '../redux/accountSlice';
 import axios from 'axios';
 import { getNotificationsSuccess } from '../redux/notificationSlice';
+import useApi from '../hooks/ApiCalls';
 
 const CreditAccountPage = () => {
   const dispatch = useDispatch();
+  const {
+    creditUserAccount,
+    getNotifications,
+    getUserSingleAccountDetailsByAccountNumber,
+    getUserSingleAccountTransactionsWithoutQuery,
+  } = useApi();
+
   const [selectedAccountNumber, setSelectedAccountNumber] =
     useState<string>('');
   const [amount, setAmount] = useState('');

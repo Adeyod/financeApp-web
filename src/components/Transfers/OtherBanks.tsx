@@ -1,10 +1,5 @@
 import { useEffect, useState } from 'react';
-import {
-  fetchBankDetails,
-  getAccountName,
-  getNotifications,
-  makeTransferToOtherBank,
-} from '../../hooks/ApiCalls';
+
 import Spinner from '../Spinner';
 import Form from '../Form';
 import { toast } from 'react-toastify';
@@ -24,14 +19,23 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { getNotificationsSuccess } from '../../redux/notificationSlice';
 import { useDispatch } from 'react-redux';
+import useApi from '../../hooks/ApiCalls';
 
 const OtherBanks = ({ selectedAccountNumber }: FundFlowProp) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const {
+    fetchBankDetails,
+    getAccountName,
+    getNotifications,
+    makeTransferToOtherBank,
+  } = useApi();
+
   const [banks, setBanks] = useState<BankProps[]>([]);
   const [loading, setLoading] = useState(true);
   const [amLoading, setAmLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
   const [selectedBank, setSelectedBank] = useState('');
   const [receivingAccount, setReceivingAccount] = useState('');
   const [amount, setAmount] = useState('');

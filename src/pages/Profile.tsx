@@ -1,25 +1,23 @@
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Spinner from '../components/Spinner';
-import { loginSuccess } from '../redux/userSlice';
+import { loginSuccess, updateUser } from '../redux/userSlice';
 import { AccountState, UserState } from '../constants/types';
 import { toast } from 'react-toastify';
-import {
-  getNotifications,
-  getUserAccounts,
-  imageProfileUpload,
-} from '../hooks/ApiCalls';
+
 import { getAccountsFailure, getAccountsSuccess } from '../redux/accountSlice';
 import axios from 'axios';
 import { capitalizeFirstLetter } from '../hooks/functions';
 import { Link } from 'react-router-dom';
 import { getNotificationsSuccess } from '../redux/notificationSlice';
 import SmallSpinner from '../components/SmallSpinner';
+import useApi from '../hooks/ApiCalls';
 
 const Profile = () => {
   const [loading, setLoading] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [imgUrl, setImgUrl] = useState<string>();
+  const { getNotifications, getUserAccounts, imageProfileUpload } = useApi();
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
@@ -53,7 +51,7 @@ const Profile = () => {
         );
         dispatch(getNotificationsSuccess(result?.notifications));
         toast.success(data.message);
-        dispatch(loginSuccess(data));
+        dispatch(updateUser(data));
         return;
       }
       console.log(data);
@@ -105,6 +103,7 @@ const Profile = () => {
     try {
       const accountData = await getUserAccounts();
       const accountDetails = accountData?.data;
+      console.log('USER ACCOUNTS:', accountDetails);
 
       dispatch(getAccountsSuccess(accountDetails));
     } catch (error: unknown) {

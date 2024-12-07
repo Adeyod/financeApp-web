@@ -2,19 +2,20 @@ import { useEffect, useState } from 'react';
 import Spinner from '../components/Spinner';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { callbackResult, getNotifications } from '../hooks/ApiCalls';
 import { FaRegHandPointRight } from 'react-icons/fa';
 import { GoVerified } from 'react-icons/go';
 import { BiErrorAlt } from 'react-icons/bi';
 import axios from 'axios';
 import { getNotificationsSuccess } from '../redux/notificationSlice';
 import { useDispatch } from 'react-redux';
+import useApi from '../hooks/ApiCalls';
 
 const PaystackCallback = () => {
   const dispatch = useDispatch();
 
   const [loading, setLoading] = useState(true);
   const [success, setSuccess] = useState(false);
+  const { callbackResult, getNotifications } = useApi();
 
   const searchParams = new URLSearchParams(location.search);
   const reference = searchParams.get('reference');

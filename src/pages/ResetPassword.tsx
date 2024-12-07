@@ -20,9 +20,9 @@ import Spinner from '../components/Spinner';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { joiResetPasswordValidationSchema } from '../hooks/validation';
-import { getNotifications, resetPasswordProcess } from '../hooks/ApiCalls';
 import { getNotificationsSuccess } from '../redux/notificationSlice';
 import { useDispatch } from 'react-redux';
+import useApi from '../hooks/ApiCalls';
 
 const resetPasswordParams: ResetPasswordParams[] = [
   {
@@ -49,6 +49,7 @@ const ResetPassword = () => {
     password: '',
     confirm_password: '',
   });
+  const { getNotifications, resetPasswordProcess } = useApi();
 
   const searchParams = new URLSearchParams(location.search);
   const userId = searchParams.get('userId') || '';

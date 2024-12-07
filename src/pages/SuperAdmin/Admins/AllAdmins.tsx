@@ -7,15 +7,14 @@ import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { SuperAdminState } from '../../../constants/types';
 import { Link } from 'react-router-dom';
-import {
-  getPlatformAdmins,
-  reduceAdminToCustomer,
-} from '../../../hooks/ApiCalls';
+
 import { getAllAdminsSuccess } from '../../../redux/superAdminSlice';
+import useApi from '../../../hooks/ApiCalls';
 
 const AllAdmins = () => {
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
+  const { getPlatformAdmins, reduceAdminToCustomer } = useApi();
 
   const { allAdmins, allAdminsTotalCount } = useSelector(
     (state: { super_admin: SuperAdminState }) => state.super_admin

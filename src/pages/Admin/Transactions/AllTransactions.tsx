@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { AdminState } from '../../../constants/types';
 import { getAllTransactionsSuccess } from '../../../redux/adminSlice';
-import { getPlatformTransactions } from '../../../hooks/ApiCalls';
+import useApi from '../../../hooks/ApiCalls';
 import { Link } from 'react-router-dom';
 import Spinner from '../../../components/Spinner';
 import { formatDate, formattedNumber } from '../../../hooks/functions';
@@ -14,6 +14,7 @@ import Search from '../../../components/Search';
 const AllTransactions = () => {
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
+  const { getPlatformTransactions } = useApi();
 
   const { allTransactions, allTransactionsTotalCount } = useSelector(
     (state: { admin: AdminState }) => state.admin

@@ -7,11 +7,7 @@ import {
   RegisterButtonTextStyle,
 } from '../../constants/styles';
 import { toast } from 'react-toastify';
-import {
-  getFundFlowReceivingAccountName,
-  getNotifications,
-  makeTransferToFundFlowAccount,
-} from '../../hooks/ApiCalls';
+
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { FundFlowProp, ReceiverProp } from '../../constants/types';
@@ -19,10 +15,18 @@ import { joiReceivingAccountSchema } from '../../hooks/validation';
 import SmallSpinner from '../SmallSpinner';
 import { getNotificationsSuccess } from '../../redux/notificationSlice';
 import { useDispatch } from 'react-redux';
+import useApi from '../../hooks/ApiCalls';
 
 const FundFlow = ({ selectedAccountNumber }: FundFlowProp) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const {
+    getFundFlowReceivingAccountName,
+    getNotifications,
+    makeTransferToFundFlowAccount,
+  } = useApi();
+
   const [amount, setAmount] = useState('');
   const [loading, setLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);

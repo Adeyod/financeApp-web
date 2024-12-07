@@ -3,11 +3,11 @@ import { useParams } from 'react-router-dom';
 import { TransactionState } from '../constants/types';
 import { formatDate, formattedNumber } from '../hooks/functions';
 import { toast } from 'react-toastify';
-import { getSingleTransactionByTransactionId } from '../hooks/ApiCalls';
 import { useEffect, useState } from 'react';
 import Spinner from '../components/Spinner';
 import { getSingleTransactionSuccess } from '../redux/transactionSlice';
 import axios from 'axios';
+import useApi from '../hooks/ApiCalls';
 
 const TransactionDetails = () => {
   const dispatch = useDispatch();
@@ -17,6 +17,8 @@ const TransactionDetails = () => {
   const { singleTransactionDetails } = useSelector(
     (state: { transactions: TransactionState }) => state.transactions
   );
+
+  const { getSingleTransactionByTransactionId } = useApi();
 
   console.log(singleTransactionDetails);
 
@@ -62,11 +64,9 @@ const TransactionDetails = () => {
               <div className="flex flex-col text-[16px] items-start">
                 <p className="">
                   <span className="uppercase font-bold italic">Amount: </span>
-                  {
-                    singleTransactionDetails?.transaction_type === 'debit' && (
-                      <span className="text-2xl">-</span>
-                    )
-                  }
+                  {singleTransactionDetails?.transaction_type === 'debit' && (
+                    <span className="text-2xl">-</span>
+                  )}
                   #{formattedNumber(Number(singleTransactionDetails?.amount))}
                 </p>
                 <p className="">

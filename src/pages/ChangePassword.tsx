@@ -16,7 +16,7 @@ import {
   RegisterButtonStyle,
   RegisterButtonTextStyle,
 } from '../constants/styles';
-import { changeUserPassword } from '../hooks/ApiCalls';
+import useApi from '../hooks/ApiCalls';
 import axios from 'axios';
 
 const changePasswordParams: ChangePasswordParams[] = [
@@ -46,6 +46,8 @@ const changePasswordParams: ChangePasswordParams[] = [
 const ChangePassword = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { changeUserPassword } = useApi();
+
   const [formData, setFormData] = useState<ChangePasswordData>({
     current_password: '',
     new_password: '',

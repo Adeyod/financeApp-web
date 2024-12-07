@@ -13,17 +13,20 @@ import TransactionSummary from '../components/Transactions/TransactionSummary';
 import Spinner from '../components/Spinner';
 import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { getUserTransactions } from '../hooks/ApiCalls';
 import { toast } from 'react-toastify';
 import { getTransactionsSuccess } from '../redux/transactionSlice';
 import axios from 'axios';
 import Search from '../components/Search';
 import useDebounce from '../hooks/UseDebounce';
+import useApi from '../hooks/ApiCalls';
 
 const TransactionsPage = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const [loading, setLoading] = useState(false);
+
+  const { getUserTransactions } = useApi();
+
   const [localTransactionDetails, setLocalTransactionDetails] = useState<
     TransactionType[]
   >([]);

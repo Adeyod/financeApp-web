@@ -5,12 +5,13 @@ import Spinner from '../components/Spinner';
 import { capitalizeFirstLetter, formattedNumber } from '../hooks/functions';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { createNewAccountNumber, getUserAccounts } from '../hooks/ApiCalls';
 import { getAccountsStart, getAccountsSuccess } from '../redux/accountSlice';
 import axios from 'axios';
+import useApi from '../hooks/ApiCalls';
 
 const MyAccountsPage = () => {
   const dispatch = useDispatch();
+  const { createNewAccountNumber, getUserAccounts } = useApi();
 
   const { currentUser } = useSelector(
     (state: { user: UserState }) => state.user
