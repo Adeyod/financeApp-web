@@ -166,9 +166,13 @@ const FundFlow = ({ selectedAccountNumber }: FundFlowProp) => {
   }, [receivingAccount]);
 
   return (
-    <div className="min-w-[30vw] flex flex-col items-center">
-      <form onSubmit={handleTransferToAnotherFundFlowAccount} action="">
-        <div className="w-[100%]">
+    <div className="min-w-[30vw] w-[100%] flex flex-col items-center">
+      <form
+        onSubmit={handleTransferToAnotherFundFlowAccount}
+        className="lg:w-[30vw] md:w-[40vw] mt-5 justify-center items-center flex flex-col"
+        action=""
+      >
+        <div className="w-[85vw] lg:w-[30vw]">
           <Form
             title={'Amount'}
             type={'text'}
@@ -209,15 +213,15 @@ const FundFlow = ({ selectedAccountNumber }: FundFlowProp) => {
             setValue={handleDescriptionChange}
           />
         </div>
-        <div className="w-[100%]">
-          <Button
-            title={'Credit Account'}
-            loading={loading}
-            buttonStyle={RegisterButtonStyle}
-            buttonContainerStyle={RegisterButtonContainerStyle}
-            buttonTextStyle={RegisterButtonTextStyle}
-          />
-        </div>
+        {/* <div className=""> */}
+        <Button
+          title={'Credit Account'}
+          loading={loading}
+          buttonStyle={RegisterButtonStyle}
+          buttonContainerStyle={RegisterButtonContainerStyle}
+          buttonTextStyle={RegisterButtonTextStyle}
+        />
+        {/* </div> */}
       </form>
     </div>
   );

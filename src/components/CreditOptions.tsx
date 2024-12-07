@@ -8,8 +8,8 @@ const CreditOptions = ({
   selectedAccountNumber,
 }: CreditOptionsType) => {
   return (
-    <div className="ml-16 mlg:ml-20">
-      <div className="q-stat w-[70%] flex flex-col lg:ml-0 slg:ml-0 mlg:ml-20  md:ml-[300px] lg:flex-row justify-evenly lg:items-center slg:items-center mlg:items-center min-w-[100%] gap-4 md:gap-0">
+    <div className="mx-4 md:ml-16 mlg:ml-20">
+      <div className="q-stat md:w-[70%] flex flex-col lg:ml-0 slg:ml-0 mlg:ml-20  md:ml-[300px] lg:flex-row justify-evenly lg:items-center slg:items-center mlg:items-center min-w-[100%] gap-4 md:gap-0">
         <div className="lg:w-[33.3%] clg:w-[25%] slg:w-[30%] md:w-[60vw] h-[120px] flex flex-col gap-2 md:content-start md:ml-[-300px] lg:ml-0 items-start justify-center border-8 border-[#F9FAFB] rounded-[20px] p-4 bg-secondary">
           <div className="flex clg:flex-col gap-2 justify-center items-center ">
             <div className="border-4 clg:hidden border-[#FFF7E7] rounded-full bg-[#FFC453] p-2"></div>

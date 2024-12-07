@@ -184,11 +184,11 @@ const NavBar = () => {
                 toggle
                   ? 'fade-enter fade-enter-active'
                   : 'hidden fade-exit fade-exit-active',
-                'bg-secondary text-black overflow-y-visible z-[9999] absolute md:hidden h-screen top-[70px] w-[30vw] pl-10  pb-10 items-start right-0 text-xl',
+                'bg-secondary text-black overflow-y-visible z-[9999] absolute md:hidden h-screen top-[70px] w-[50vw] smm:w-[30vw] pl-10  pb-10 items-start right-0 text-xl',
               ].join(' ')}
             >
               {currentUser && currentUser !== null ? (
-                <div className=" ml-[-50px] text-[12px] flex flex-col items-start gap-1 mt-6">
+                <div className=" ml-[-50px] h-full text-[12px] flex flex-col items-start gap-1 pl-2 mt-6 overflow-y-auto">
                   <GeneralSidebar
                     handleGeneralMenuToggle={handleGeneralMenuToggle}
                     generalMenuOpen={generalMenuOpen}
@@ -216,7 +216,7 @@ const NavBar = () => {
                   )}
 
                   <button
-                    className="text-red-600 mb-32 ml-7 mt-5 text-[12px] smm:text-[15px] mng:text-[18px]"
+                    className="text-red-600 ml-7 mt-2 text-[12px] mb-20 smm:text-[15px] mng:text-[18px]"
                     onClick={handleLogout}
                   >
                     Logout

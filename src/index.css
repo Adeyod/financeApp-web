@@ -7,4 +7,5 @@ body,
 #root {
   overflow: hidden;
   height: 100%;
+  /* margin-bottom: 5px; */
 }

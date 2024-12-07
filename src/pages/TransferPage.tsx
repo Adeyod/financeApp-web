@@ -99,7 +99,7 @@ const TransferPage = () => {
 
   return (
     <div className="mt-6">
-      <div className="mx-10 mt-16 ml-1 md:mx-5">
+      <div className="mt-16 ml-1 md:mx-5">
         <CreditOptions
           singleAccountCompletedTransactionsCount={
             singleAccountCompletedTransactionsCount
@@ -112,11 +112,11 @@ const TransferPage = () => {
         />
       </div>
       <div className="flex flex-col items-center justify-center mt-10">
-        <div className="lg:w-[30vw] md:w-[40vw] w-[50vw] justify-center items-center flex flex-col">
+        <div className="lg:w-[30vw] md:w-[40vw] w-[85vw] justify-center items-center flex flex-col">
           <select
             name="account_number"
             id="account_number"
-            className="border px-4 py-2 rounded-md w-[70%]"
+            className="border px-4 py-2 rounded-md w-[100%] md:w-[70%]"
             value={selectedAccountNumber}
             onChange={handleAccountChange}
           >
@@ -153,7 +153,7 @@ const TransferPage = () => {
           </button>
         </div>
 
-        <div className="mb-32">
+        <div className="mb-32 ">
           {fundFlow ? (
             <div className="">
               <FundFlow selectedAccountNumber={selectedAccountNumber} />
@@ -163,7 +163,7 @@ const TransferPage = () => {
               <OtherBanks selectedAccountNumber={selectedAccountNumber} />
             </div>
           ) : (
-            <div className="">Please select bank</div>
+            <div className="text-center">Please select bank</div>
           )}
         </div>
       </div>

@@ -163,7 +163,7 @@ const CreditAccountPage = () => {
     setAmount(text);
   };
   return (
-    <div>
+    <div className="mb-10">
       <div className="mt-10 ml-5 mb-3">
         <p className="text-xl">
           {capitalizeFirstLetter(currentUser?.first_name)}, we promise you
@@ -180,21 +180,21 @@ const CreditAccountPage = () => {
         accountInfo={singleAccountDetails}
         selectedAccountNumber={selectedAccountNumber}
       />
-      <div className="flex mt-[70px] lg:justify-around md:gap-[100px] justify-center items-center md:px-10 lg:px-20 py-10">
+      <div className="flex md:mt-[70px] lg:justify-around md:gap-[100px] justify-center items-center md:px-10 lg:px-20 py-10">
         <form
           action=""
-          className="lg:w-[30vw] md:w-[40vw] w-[50vw] justify-center items-center flex flex-col"
+          className="lg:w-[30vw] md:w-[40vw] justify-center items-center flex flex-col"
           onSubmit={handleSubmit}
         >
-          <div>
-            <p className="uppercase text-3xl text-center font-bold underline">
+          <div className="w-[85vw] flex flex-col items-center">
+            <p className="uppercase text-3xl mb-3 text-center font-bold underline">
               Credit Account
             </p>
 
             <select
               name="account_number"
               id="account_number"
-              className="border px-4 py-2 rounded-md w-[70%]"
+              className="border px-4 py-2 rounded-md md:w-[70%] w-[100%] lg:w-[30vw]"
               value={selectedAccountNumber}
               onChange={handleAccountChange}
             >
@@ -208,7 +208,7 @@ const CreditAccountPage = () => {
               ))}
             </select>
 
-            <div className="w-[70%]">
+            <div className="md:w-[70%] w-[85vw] lg:w-[30vw]">
               <Form
                 title={'Amount'}
                 type={'text'}
@@ -220,16 +220,17 @@ const CreditAccountPage = () => {
                 setValue={handleChange}
               />
             </div>
-            <div className="w-[70%]">
-              <Button
-                title={'Credit Account'}
-                loading={loading}
-                buttonStyle={RegisterButtonStyle}
-                buttonContainerStyle={RegisterButtonContainerStyle}
-                buttonTextStyle={RegisterButtonTextStyle}
-              />
-            </div>
           </div>
+
+          {/* <div className="md:w-[70%] mb-20 "> */}
+          <Button
+            title={'Credit Account'}
+            loading={loading}
+            buttonStyle={RegisterButtonStyle}
+            buttonContainerStyle={RegisterButtonContainerStyle}
+            buttonTextStyle={RegisterButtonTextStyle}
+          />
+          {/* </div> */}
         </form>
       </div>
     </div>

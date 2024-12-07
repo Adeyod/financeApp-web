@@ -255,15 +255,15 @@ const OtherBanks = ({ selectedAccountNumber }: FundFlowProp) => {
         <div>
           <form
             onSubmit={handleSubmit}
-            className="lg:w-[30vw] md:w-[40vw] w-[50vw] mt-5 justify-center items-center flex flex-col"
+            className="lg:w-[30vw] md:w-[40vw] mt-5 justify-center items-center flex flex-col"
             action=""
           >
-            <div className="flex flex-col items-center">
+            <div className="flex flex-col items-start">
               <p className="text-start mr-[240px] uppercase font-bold">bank</p>
               <select
                 name="account_number"
                 id="account_number"
-                className="border px-4 py-2 rounded-md w-[70%]"
+                className="border px-4 py-2 rounded-md w-[80vw] lg:w-[30vw] md:w-[70%]"
                 value={selectedBank}
                 onChange={handleBank}
               >
@@ -278,7 +278,7 @@ const OtherBanks = ({ selectedAccountNumber }: FundFlowProp) => {
               </select>
             </div>
 
-            <div className="w-[70%]">
+            <div className="w-[80vw] lg:w-[30vw]">
               <Form
                 title={'Receiving Account'}
                 type={'text'}
