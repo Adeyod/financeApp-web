@@ -9,3 +9,9 @@ body,
   height: 100%;
   /* margin-bottom: 5px; */
 }
+
+input.PhoneInputInput:focus {
+  outline: none !important;
+  box-shadow: none !important;
+  border-color: transparent !important;
+}

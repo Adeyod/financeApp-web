@@ -63,7 +63,7 @@ const registerParams: RegisterParams[] = [
 ];
 
 const RegisterPage = () => {
-  const [phoneValue, setPhoneValue] = useState('+2348100987235');
+  const [phoneValue, setPhoneValue] = useState('');
   const [loading, setLoading] = useState(false);
   let [formData, setFormData] = useState<FormData>({
     first_name: '',

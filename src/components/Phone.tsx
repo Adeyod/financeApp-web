@@ -1,5 +1,6 @@
 import 'react-phone-number-input/style.css';
 import PhoneInput from 'react-phone-number-input';
+import '../index.css';
 
 type PhoneType = {
   value: string;
@@ -13,7 +14,7 @@ const Phone = ({ value, setValue }: PhoneType) => {
         Phone number
       </label>
       <PhoneInput
-        className="border p-2"
+        className="custom-phone-input border p-2"
         placeholder="Enter phone number"
         value={value}
         onChange={(phone) => setValue(phone || '')}
