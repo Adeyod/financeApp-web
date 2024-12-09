@@ -68,7 +68,7 @@ const AdminDropDownMenu = ({
       )}
 
       {/* TRANSACTIONS SECTION */}
-      <button onClick={handleDropDownToggle}>
+      <button className="" onClick={handleDropDownToggle}>
         {toggle ? <span></span> : <span>Transactions</span>}
       </button>
       {dropDownOpen && (

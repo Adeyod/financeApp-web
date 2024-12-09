@@ -13,13 +13,12 @@ const AdminSidebar = ({
 
   const handleDropDownToggle = () => {
     setDropDownOpen(!dropDownOpen);
+    console.log('DROP DOWN TOGGLED:', !dropDownOpen);
   };
 
   return (
     <div
-      className={[adminMenuOpen ? 'mb-[-15px]' : 'mb-[-25px]', 'ml-5 '].join(
-        ' '
-      )}
+      className={[adminMenuOpen ? 'mb-[1px]' : 'mb-[10px]', 'ml-5 '].join(' ')}
     >
       <button onClick={handleAdminMenuToggle}>
         <span className={toggle ? 'flex' : 'hidden'}>

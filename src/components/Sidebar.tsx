@@ -31,6 +31,7 @@ const Sidebar = () => {
 
   const handleGeneralMenuToggle = () => {
     setGeneralMenuOpen(!generalMenuOpen);
+    console.log('GENERAL MENU OPEN:', !generalMenuOpen);
   };
 
   const handleAdminMenuToggle = () => {
@@ -85,7 +86,7 @@ const Sidebar = () => {
 
           {currentUser && (
             <button
-              className="text-red-800 mt-5 font-bold mb-32 ml-5 text-[12px] smm:text-[15px] mng:text-[18px]"
+              className="text-red-800 mt-6 font-bold mb-[100px] ml-5 text-[12px] smm:text-[15px] mng:text-[18px]"
               onClick={handleLogout}
             >
               Logout

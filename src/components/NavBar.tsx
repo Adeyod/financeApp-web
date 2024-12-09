@@ -216,7 +216,7 @@ const NavBar = () => {
                   )}
 
                   <button
-                    className="text-red-600 ml-7 mt-2 text-[12px] mb-20 smm:text-[15px] mng:text-[18px]"
+                    className="text-red-600 ml-7 mt-7 text-[12px] mb-20 smm:text-[15px] mng:text-[18px]"
                     onClick={handleLogout}
                   >
                     Logout

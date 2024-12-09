@@ -15,7 +15,7 @@ const SuperAdminSidebar = ({
   };
 
   return (
-    <div className="ml-5 mt-8">
+    <div className="ml-5 mt-2">
       <button onClick={handleSuperAdminMenuToggle}>
         <span className={toggle ? 'flex' : 'hidden'}>
           {' '}
